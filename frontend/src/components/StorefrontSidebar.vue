@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex h-screen w-full max-w-sm flex-col items-start p-4 shadow-md absolute top-14"
+        class="flex h-full w-full flex-col items-start p-4 shadow-md"
     >
         <div class="w-full flex justify-end">
             <Icon

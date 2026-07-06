@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-row border-b border-b-secondary px-12 py-4 gap-12 text-sm mt-2 mb-4"
+        class="flex flex-row border-b border-b-secondary px-12 py-4 gap-12 text-sm mt-2"
     >
         <router-link to="/home" active-class="text-tertiary font-bold"
             >Home</router-link
