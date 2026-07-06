@@ -1,10 +1,16 @@
-<script setup>
-import Header from "./components/Header.vue";
-</script>
-
 <template>
-    <Header />
-    <router-view/>
+    <div class="min-h-screen flex flex-col relative">
+        <Header />
+        <router-view />
+    </div>
 </template>
 
-<style scoped></style>
+<script>
+import Header from "./components/Header.vue";
+
+export default {
+    components: {
+        Header,
+    },
+};
+</script>
