@@ -22,8 +22,12 @@
         </div>
 
         
-        <div class="h-screen p-4 basis-1/2 bg-slate-200">
-            <StorefrontForm/>
+        <div class="h-screen p-4 basis-1/2">
+            <div class="flex flex-col gap-4">
+                <StorefrontForm/>
+                <StorefrontDivider/>
+                <StorefrontKanban/>
+            </div>
         </div>
 
 
@@ -42,13 +46,17 @@
 </template>
 
 <script>
-import StorefrontForm from "@/components/StorefrontForm.vue";
 import StorefrontSidebar from "@/components/StorefrontSidebar.vue";
+import StorefrontForm from "@/components/StorefrontForm.vue";
+import StorefrontDivider from "@/components/StorefrontDivider.vue";
+import StorefrontKanban from "@/components/StorefrontKanban.vue";
 
 export default {
     components: {
         StorefrontSidebar,
-        StorefrontForm
+        StorefrontForm,
+        StorefrontDivider,
+        StorefrontKanban,
     },
     data() {
         return {
