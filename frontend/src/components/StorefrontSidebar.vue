@@ -12,7 +12,11 @@
         <div class="w-full mb-4">
             <span class="text-lg">Global parameters</span>
             <div class="flex flex-row justify-between mx-4">
-                <label>Couleurs</label>
+                <label>Colors</label>
+                <div class="w-8 h-5 bg-secondary"></div>
+            </div>
+            <div class="flex flex-row justify-between mx-4">
+                <label>Background</label>
                 <div class="w-8 h-5 bg-secondary"></div>
             </div>
         </div>

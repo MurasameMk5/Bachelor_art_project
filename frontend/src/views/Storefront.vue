@@ -21,9 +21,12 @@
             </Transition>
         </div>
 
+        
         <div class="h-screen p-4 basis-1/2 bg-slate-200">
-            <span> holaaa</span>
+            <StorefrontForm/>
         </div>
+
+
         <div class="basis-1/4 ">
             <div class="flex min-w-0 justify-end gap-8 mx-4 mt-4">
                 <button
@@ -39,11 +42,13 @@
 </template>
 
 <script>
+import StorefrontForm from "@/components/StorefrontForm.vue";
 import StorefrontSidebar from "@/components/StorefrontSidebar.vue";
 
 export default {
     components: {
         StorefrontSidebar,
+        StorefrontForm
     },
     data() {
         return {
