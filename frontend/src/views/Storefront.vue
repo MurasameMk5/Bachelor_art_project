@@ -27,6 +27,7 @@
                 <StorefrontForm/>
                 <StorefrontDivider/>
                 <StorefrontKanban/>
+                <StorefrontImage/>
             </div>
         </div>
 
@@ -50,6 +51,7 @@ import StorefrontSidebar from "@/components/StorefrontSidebar.vue";
 import StorefrontForm from "@/components/StorefrontForm.vue";
 import StorefrontDivider from "@/components/StorefrontDivider.vue";
 import StorefrontKanban from "@/components/StorefrontKanban.vue";
+import StorefrontImage from "@/components/StorefrontImage.vue";
 
 export default {
     components: {
@@ -57,6 +59,7 @@ export default {
         StorefrontForm,
         StorefrontDivider,
         StorefrontKanban,
+        StorefrontImage,
     },
     data() {
         return {
