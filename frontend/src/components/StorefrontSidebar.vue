@@ -9,24 +9,48 @@
                 class="w-6 h-6"
             />
         </div>
-        <div class="w-full mb-4">
-            <span class="text-lg">Global parameters</span>
-            <div class="flex flex-row justify-between mx-4">
-                <label>Colors</label>
-                <div class="w-8 h-5 bg-secondary"></div>
+        <div v-auto-animate class="w-full">
+            <div v-if="store.getPage === MenuPages.GLOBAL">
+                <span class="text-lg">Global parameters</span>
+                <div class="flex flex-col gap-4 my-4 mb-20">
+                    <div class="flex flex-row justify-between mx-4 gap-4">
+                        <label>Background</label>
+                        <input type="file" class="basis-1/2 w-full"/>
+                    </div>
+                    <div class="flex flex-row justify-between mx-4">
+                        <label>Visible</label>
+                        <input type="checkbox" />
+                    </div>
+                </div>
+                <span class="text-lg">Add component</span>
+                <div class="grid w-full grid-cols-3 gap-4">
+                    <div
+                        v-for="component in this.components" @click="changePage(component.type)"
+                        class="flex flex-col items-center text-center justify-center my-2 py-2 bg-secondary-300 rounded-3xl"
+                    >
+                        <Icon :icon="component.icon" class="w-6 h-6" />
+                        <span> {{ component.label }} </span>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-row justify-between mx-4">
-                <label>Background</label>
-                <div class="w-8 h-5 bg-secondary"></div>
-            </div>
-        </div>
-        <div class="grid w-full grid-cols-3 gap-4">
-            <div
-                v-for="component in this.components"
-                class="flex flex-col items-center text-center justify-center my-2 py-2 bg-secondary-300 rounded-3xl"
-            >
-                <Icon :icon="component.icon" class="w-6 h-6" />
-                <span> {{ component.label }} </span>
+            <div v-else>
+                <div class="flex flex-row items-center gap-4 mb-4">
+                    <Icon
+                        @click="store.setPage(MenuPages.GLOBAL)"
+                        icon="lucide:arrow-left"
+                        class="w-6 h-6"
+                    />
+                    <span class="text-lg">{{ store.getPage }}</span>
+                </div>
+                <div v-if="store.getPage === MenuPages.COMMISSION">
+                    <StorefrontCommissionForm />
+                </div>
+                <div v-if="store.getPage === MenuPages.TOS">
+                    <StorefrontTosForm />
+                </div>
+                <div v-if="store.getPage === MenuPages.IMAGE">
+                    <StorefrontImageForm />
+                </div>
             </div>
         </div>
     </div>
@@ -34,15 +58,24 @@
 
 <script>
 import { Icon } from "@iconify/vue";
+import { MenuPages, useStorefrontStore } from "@/stores/storefront.js";
+import StorefrontCommissionForm from "./StorefrontCommissionForm.vue";
+import StorefrontTosForm from "./StorefrontTosForm.vue";
+import StorefrontImageForm from "./StorefrontImageForm.vue";
 
 export default {
     components: {
         Icon,
+        StorefrontCommissionForm,
+        StorefrontTosForm,
+        StorefrontImageForm,
     },
     data() {
         return {
+            MenuPages,
+            store: useStorefrontStore(),
             components: [
-                { type: "form", label: "Form", icon: "lucide:form" },
+                { type: "commission", label: "Commission", icon: "lucide:form" },
                 {
                     type: "tos",
                     label: "Tos",
@@ -54,6 +87,24 @@ export default {
                 { type: "divider", label: "Divider", icon: "pixel:divider" },
             ],
         };
+    },
+    methods: {
+        changePage(componentType) {
+            switch (componentType) {
+                case "commission":
+                    this.store.setPage(MenuPages.COMMISSION);
+                    break;
+                case "tos":
+                    this.store.setPage(MenuPages.TOS);
+                    break;
+                case "image":
+                    this.store.setPage(MenuPages.IMAGE);
+                    break;
+            }
+        },
+    },
+    mounted() {
+        this.store.setPage(MenuPages.GLOBAL);
     },
 };
 </script>

@@ -1,0 +1,41 @@
+{
+  "global_parameters": {
+    "background_url": null,
+    "is_visible": true,
+  },
+  "components": [
+    {
+      "id": "temp_1",
+      "type": "text",
+      "order_position": 1,
+      "content": {
+        "value": "Welcome to my storefront! Check my available commissions below.",
+        "align": "left"
+      }
+    },
+    {
+      "id": "temp_2",
+      "type": "commission",
+      "order_position": 2,
+      "content": {
+        "form_id": null,
+        "button_text": "Request a Commission",
+        "show_price": true
+      }
+    },
+    {
+      "id": "temp_3",
+      "type": "divider",
+      "order_position": 3,
+      "content": {}
+    },
+    {
+      "id": "temp_4",
+      "type": "kanban",
+      "order_position": 4,
+      "content": {
+        "title": "Current Work in Progress"
+      }
+    }
+  ]
+}

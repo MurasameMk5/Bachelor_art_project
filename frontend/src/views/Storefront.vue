@@ -24,10 +24,13 @@
         
         <div class="h-screen p-4 basis-1/2">
             <div class="flex flex-col gap-4">
-                <StorefrontForm/>
+                <StorefrontCommission/>
                 <StorefrontDivider/>
                 <StorefrontKanban/>
-                <StorefrontImage/>
+                <StorefrontImage
+                    :images="this.images"
+                />
+                <StorefrontText/>
             </div>
         </div>
 
@@ -38,7 +41,7 @@
                     @click="sidebarActive = true"
                     class="btn-secondary justify-end"
                 >
-                    Add component
+                    Components
                 </button>
                 <button class="btn-secondary justify-end">Preview</button>
             </div>
@@ -48,22 +51,41 @@
 
 <script>
 import StorefrontSidebar from "@/components/StorefrontSidebar.vue";
-import StorefrontForm from "@/components/StorefrontForm.vue";
+import StorefrontCommission from "@/components/StorefrontCommission.vue";
 import StorefrontDivider from "@/components/StorefrontDivider.vue";
 import StorefrontKanban from "@/components/StorefrontKanban.vue";
 import StorefrontImage from "@/components/StorefrontImage.vue";
+import StorefrontText from "@/components/StorefrontText.vue";
 
 export default {
     components: {
         StorefrontSidebar,
-        StorefrontForm,
+        StorefrontCommission,
         StorefrontDivider,
         StorefrontKanban,
         StorefrontImage,
+        StorefrontText,
     },
     data() {
         return {
             sidebarActive: false,
+            images: [
+                {
+                    image_ref: "./../../Kamome Shirahama-min.png",
+                    image_desc: "Description of the image",
+                    label: "Image by Kamome Shirahama"
+                },
+                {
+                    image_ref: "./../../Akihiko Yoshida-min.png",
+                    image_desc: "Description of another image",
+                    label: "Image by Akihiko Yoshida"
+                },
+                {
+                    image_ref: "./../../Arthur Rackham-min.png",
+                    image_desc: "Description of yet another image",
+                    label: "Image by Arthur Rackham"
+                }
+            ]
         };
     },
 };
