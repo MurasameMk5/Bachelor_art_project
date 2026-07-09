@@ -32,7 +32,7 @@
         </div>
         <div class="flex flex-row justify-between gap-2">
             <span>Questions</span>
-            <button @click="addQuestion" class="btn-primary">Add Question</button>
+            <button @click="addQuestion" class="btn-secondary">Add Question</button>
         </div>
         <div v-for="(question, index) in questions" :key="index" class="flex flex-col gap-2">
             <span> Question {{ index + 1 }}</span>
@@ -42,17 +42,18 @@
                 <option value="radio">Radio Button</option>
                 <option value="file">File</option>
             </select>
-            <div v-if="question.type='radio'" class="gap-2">
+            <div v-if="question.type='radio'" class="flex flex-col gap-2 justify-center ">
                 <span>Options</span>
                 <div class="flex flex-col gap-2">
-                    <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row gap-2">
+                    <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row items-center gap-2">
                         <input type="text" class="border border-gray-400 rounded-md w-full"/>
-                        <Icon @click="question.options.splice(optionIndex, 1)" class="btn-danger" icon="lucide:trash-2"/>
+                        <Icon @click="question.options.splice(optionIndex, 1)" class="btn-danger " icon="lucide:trash-2"/>
                     </div>
                 </div>
-                <button @click="question.options.push('')">+</button>
+                <button @click="question.options.push('')" class="btn-secondary">Add Option</button>
             </div>
         </div> 
+        <button class="btn-primary">Insert</button>
     </div>
 </template>
 
@@ -66,7 +67,7 @@ export default {
     data() {
         return {
             imagesSelected: [],
-            questions:[{ label: "", type: "text", options: []}]
+            questions:[]
         }
     },
     methods: {
@@ -84,7 +85,7 @@ export default {
         },
         addQuestion(){
             this.questions.push({ label: "", type: "text", options: []});
-        }
+        },
     },
     mounted() {
     }

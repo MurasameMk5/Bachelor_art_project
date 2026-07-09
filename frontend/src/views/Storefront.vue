@@ -12,7 +12,7 @@
             >
                 <div
                     v-if="sidebarActive"
-                    class="w-full"
+                    class="w-full h-full"
                 >
                     <StorefrontSidebar
                         class="min-w-0"

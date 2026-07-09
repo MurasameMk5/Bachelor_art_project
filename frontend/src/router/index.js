@@ -16,6 +16,11 @@ const routes = [
     name: "storefront",
     component: () => import("../views/Storefront.vue"),
   },
+  {
+    path: "/request",
+    name: "request",
+    component: () => import("../views/Request.vue"),
+  }
 ];
 
 const router = createRouter({
