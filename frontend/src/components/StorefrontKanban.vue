@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row-3 gap-2 border-t-4 border-secondary-300 rounded-xl shadow-lg p-2 ">
+    <div class="flex flex-row-3 gap-2 border-t-4 border-secondary-300 rounded-xl shadow-lg p-2 bg-white">
         <div class="flex flex-col gap-4 w-full">
             <span class="text-lg">Brief</span>
             <div class="flex flex-col gap-2">

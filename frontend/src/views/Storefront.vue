@@ -1,6 +1,7 @@
 <template>
-    <div class="flex h-full w-full flex-row gap-4">
-        <div class=" basis-1/4">
+    <div class="relative flex min-h-screen w-full flex-row items-stretch gap-4">
+        <img v-if="backgroundImage" :src="backgroundImage" class="absolute top-0 left-0 w-full h-full -z-10"/>
+        <div class="basis-1/4 min-w-0">
             <Transition
                 enter-active-class="transition duration-200 ease-out transform"
                 enter-from-class="-translate-x-full opacity-0"
@@ -11,10 +12,10 @@
             >
                 <div
                     v-if="sidebarActive"
-                    class="absolute left-0 z-20 w-1/4"
+                    class="w-full"
                 >
                     <StorefrontSidebar
-                        class="h-screen min-w-0"
+                        class="min-w-0"
                         @close="sidebarActive = false"
                     />
                 </div>
@@ -22,7 +23,7 @@
         </div>
 
         
-        <div class="h-screen p-4 basis-1/2">
+        <div class="min-h-screen p-4 basis-1/2">
             <div class="flex flex-col gap-4">
                 <StorefrontCommission/>
                 <StorefrontDivider/>
@@ -69,6 +70,7 @@ export default {
     data() {
         return {
             sidebarActive: false,
+            backgroundImage: null,
             images: [
                 {
                     image_ref: "./../../Kamome Shirahama-min.png",
