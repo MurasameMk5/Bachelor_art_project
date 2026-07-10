@@ -34,25 +34,31 @@
             <span>Questions</span>
             <button @click="addQuestion" class="btn-secondary">Add Question</button>
         </div>
-        <div v-for="(question, index) in questions" :key="index" class="flex flex-col gap-2">
-            <span> Question {{ index + 1 }}</span>
-            <input type="text" class="border border-gray-400 rounded-md w-full"/>
-            <select class="border border-gray-400 rounded-md w-full">
-                <option value="text">Text</option>
-                <option value="radio">Radio Button</option>
-                <option value="file">File</option>
-            </select>
-            <div v-if="question.type='radio'" class="flex flex-col gap-2 justify-center ">
-                <span>Options</span>
-                <div class="flex flex-col gap-2">
-                    <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row items-center gap-2">
-                        <input type="text" class="border border-gray-400 rounded-md w-full"/>
-                        <Icon @click="question.options.splice(optionIndex, 1)" class="btn-danger " icon="lucide:trash-2"/>
-                    </div>
+        <div v-auto-animate class="flex flex-col gap-2">
+            <div v-for="(question, index) in questions" v-auto-animate :key="index" class="flex flex-col gap-2">
+                <div class="flex flex-row items-center justify-between gap-2">
+                    <span> Question {{ index + 1 }}</span>
+                    <Icon @click="questions.splice(index, 1)" class="btn-danger hover:text-red-500 transition-color" icon="lucide:trash-2"/>
                 </div>
-                <button @click="question.options.push('')" class="btn-secondary">Add Option</button>
-            </div>
-        </div> 
+                <input v-model="question.label" type="text" class="border border-gray-400 rounded-md w-full"/>
+                <select v-model="question.type" class="border border-gray-400 rounded-md w-full">
+                    <option value="text">Text</option>
+                    <option value="radio">Radio Button</option>
+                    <option value="file">File</option>
+                </select>
+                <div v-if="question.type === 'radio'" v-auto-animate class="flex flex-col gap-2 justify-center ">
+                    <span>Options</span>
+                    <div class="flex flex-col gap-2">
+                        <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row items-center gap-2">
+                            <input v-model="question.options[optionIndex]" type="text" class="border border-gray-400 rounded-md w-full"/>
+                            <Icon @click="question.options.splice(optionIndex, 1)" class="btn-danger hover:text-red-500 transition-color" icon="lucide:trash-2"/>
+                        </div>
+                    </div>
+                    <button @click="question.options.push('')" class="btn-secondary">Add Option</button>
+                </div>
+            </div> 
+        </div>
+
         <button class="btn-primary">Insert</button>
     </div>
 </template>

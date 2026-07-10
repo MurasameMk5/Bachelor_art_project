@@ -27,7 +27,7 @@
         @apply  bg-primary hover:bg-primary-600 text-white rounded-lg p-2;
     }
     .btn-secondary {
-        @apply border-2 border-secondary rounded-lg p-2;
+        @apply border-2 border-secondary rounded-lg p-2 hover:bg-secondary hover:text-white transition-colors;
     }
     
 }
