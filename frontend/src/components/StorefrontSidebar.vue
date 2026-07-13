@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex w-full flex-col items-start p-4 shadow-lg bg-white/50"
+        class="flex h-full w-full max-w-sm flex-col items-start bg-white p-3 shadow-lg sm:p-4"
     >
         <div class="w-full flex justify-end">
             <Icon
@@ -13,20 +13,20 @@
             <div v-if="store.getPage === MenuPages.GLOBAL">
                 <span class="text-lg">Global parameters</span>
                 <div class="flex flex-col gap-4 my-4 mb-20">
-                    <div class="flex flex-row justify-between mx-4 gap-4">
+                    <div class="mx-2 flex flex-row justify-between gap-3 sm:mx-4 sm:gap-4">
                         <label>Background</label>
-                        <input type="file" class="basis-1/2 w-full"/>
+                        <input type="file" class="w-full max-w-44" />
                     </div>
-                    <div class="flex flex-row justify-between mx-4">
+                    <div class="mx-2 flex flex-row justify-between sm:mx-4">
                         <label>Visible</label>
                         <input type="checkbox" />
                     </div>
                 </div>
                 <span class="text-lg">Add component</span>
-                <div class="grid w-full grid-cols-3 gap-4">
+                <div class="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
                     <div
                         v-for="component in this.components" @click="changePage(component.type)"
-                        class="flex flex-col items-center text-center justify-center my-2 py-2 bg-secondary-300 rounded-3xl"
+                        class="my-2 flex flex-col items-center justify-center rounded-3xl bg-secondary-300 py-2 text-center"
                     >
                         <Icon :icon="component.icon" class="w-6 h-6" />
                         <span> {{ component.label }} </span>

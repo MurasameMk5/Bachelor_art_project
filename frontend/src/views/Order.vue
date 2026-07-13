@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row min-h-screen">
-        <div class="basis-1/4 border-r-2 border-r-secondary px-4 pt-8">
+        <div class="md:basis-1/4 min-w-60 border-r-2 border-r-secondary px-4 pt-8">
             <span class="text-lg">Chat</span>
             <div class="flex flex-row gap-2 items-center border-y-2 border-y-yellow-500 mt-4 pl-4 py-2 rounded-md justify-center border-dotted">
                 <Icon icon="lucide:step-back" />
@@ -28,7 +28,7 @@ export default {
     methods: {},
     mounted() {
         const orderId = this.$route.params.id;
-        
+
     },
 };
 </script>

@@ -1,7 +1,9 @@
 <template>
-    <div class="min-h-screen flex flex-col relative">
+    <div class="relative flex min-h-screen flex-col">
         <Header />
-        <router-view />
+        <main class="min-h-0 flex-1">
+            <router-view />
+        </main>
     </div>
 </template>
 

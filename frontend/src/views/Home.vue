@@ -13,7 +13,7 @@
             <div>
                 <span> Work in progress</span>
                 <div class="flex flex-row gap-4 justify-center">
-                    <router-link v-for="doingOrder in doingOrders" :key="doingOrder.id" :to="`/order/${doingOrder.id}`" class="shadow-md h-80 flex flex-col relative rounded-md gap-2 w-1/6 hover:shadow-xl transition-shadow">
+                    <router-link v-for="doingOrder in doingOrders" :key="doingOrder.id" :to="`/order/${doingOrder.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
                         <div class="flex flex-row gap-2 bg-secondary rounded-t-md text-white p-2">
                             <span>{{ doingOrder.type }}</span> - <span>{{ doingOrder.client }}</span>
                         </div>
@@ -46,6 +46,8 @@ export default {
             doingOrders: [
                 { id: 1, type: "Character Sketch", step: "brief", deadline: "2026-08-30", client: "John" },
                 { id: 2, type: "Illustration", step: "sketch", deadline: "2026-09-15", client: "Aless" },
+                { id: 3, type: "Concept Art", step: "revision", deadline: "2026-08-01", client: "Maria" },
+                { id: 3, type: "Concept Art", step: "revision", deadline: "2026-08-01", client: "Maria" },
                 { id: 3, type: "Concept Art", step: "revision", deadline: "2026-08-01", client: "Maria" },
             ],
         };
