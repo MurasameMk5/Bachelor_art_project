@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             ContractSeeder::class,
             EscrowSeeder::class,
             DeliverableSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }
