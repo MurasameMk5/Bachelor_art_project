@@ -33,8 +33,8 @@ class CommissionSeeder extends Seeder
                 'artist_id' => $artistIds[$i % $artistIds->count()],
                 'title' => $titles[$i - 1],
                 'description' => "Description détaillée de la commission : {$titles[$i - 1]}.",
-                'base_price' => rand(20, 200) * 100, // en centimes
-                'currency' => 'EUR',
+                'base_price' => rand(20, 200) * 10,
+                'currency' => 'CHF',
                 'estimated_days' => rand(3, 21),
                 'max_free_revisions' => rand(0, 3),
                 'status' => $statuses[$i % count($statuses)],
