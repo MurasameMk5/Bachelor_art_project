@@ -12,6 +12,8 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.9.0",
     "@tailwindcss/vite": "^4.3.2",
+    "@tiptap/starter-kit": "^3.27.4",
+    "@tiptap/vue-3": "^3.27.4",
     "iconify": "^1.4.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.38",

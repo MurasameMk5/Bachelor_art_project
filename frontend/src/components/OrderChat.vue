@@ -10,14 +10,12 @@
 </template>
 
 <script>
-import { Icon } from '@iconify/vue';
 import OrderChatBubble from '@/components/OrderChatBubble.vue';
 import OrderChatInput from './OrderChatInput.vue';
 import OrderChatStage from './OrderChatStage.vue';
 
 export default {
     components: {
-        Icon,
         OrderChatBubble,
         OrderChatInput,
         OrderChatStage,

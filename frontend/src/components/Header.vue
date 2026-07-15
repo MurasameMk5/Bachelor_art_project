@@ -5,11 +5,11 @@
         <router-link to="/home" active-class="text-tertiary font-bold"
             >Home</router-link
         >
-        <router-link to="/storefront" active-class="text-tertiary font-bold"
-            >Storefront</router-link
-        >
         <router-link to="/request" active-class="text-tertiary font-bold"
             >Request</router-link
+        >
+        <router-link to="/storefront" active-class="text-tertiary font-bold"
+            >Storefront</router-link
         >
     </div>
 </template>
