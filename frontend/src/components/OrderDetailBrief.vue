@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div v-else class="border border-slate-200 m-2 rounded-lg overflow-hidden bg-white">
+        <div v-else class="border border-slate-200 rounded-lg bg-white">
             <!-- Toolbar -->
             <div class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
 
@@ -136,7 +136,7 @@
                 />
             </div>
         </div>
-        <div class="flex place-content-end my-4">
+        <div class="flex place-content-end py-4">
             <button class="btn-secondary-filled">
                 <span>Send brief</span>
             </button>

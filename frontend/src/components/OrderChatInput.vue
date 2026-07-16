@@ -6,7 +6,7 @@
         </div>
         <div class="flex flex-row gap-2 items-center justify-between">
             <input type="text" class="bg-slate-50 rounded-md w-full p-3 h-10 rounded-l-full"/>
-            <button class="btn-primary p-3 rounded-full">
+            <button class="btn-primary-filled p-3 rounded-full">
                 <Icon icon="lucide:send" />
             </button>
         </div>

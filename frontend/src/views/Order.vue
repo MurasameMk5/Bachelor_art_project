@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-row min-h-screen">
-        <div class="md:basis-1/4 min-w-60">
+    <div class="flex h-full min-h-0 flex-row">
+        <div class="md:basis-1/4 min-w-60 min-h-0">
             <OrderChat :chats="chats" />
         </div>
-        <div class="basis-3/4">
+        <div class="basis-3/4 h-full min-h-0">
             <OrderDetail />
         </div>
     </div>
@@ -21,6 +21,10 @@ export default {
     data() {
         return {
             chats: [
+                { message: 'Hello, I need more information for your order.', sender: 'artist1', role: 'artist' },
+                { message: 'Sure, what do you need?', sender: 'client1', role: 'client' },
+                { message: 'Hello, I need more information for your order.', sender: 'artist1', role: 'artist' },
+                { message: 'Sure, what do you need?', sender: 'client1', role: 'client' },
                 { message: 'Hello, I need more information for your order.', sender: 'artist1', role: 'artist' },
                 { message: 'Sure, what do you need?', sender: 'client1', role: 'client' },
             ],

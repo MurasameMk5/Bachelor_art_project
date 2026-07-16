@@ -1,7 +1,7 @@
 <template>
-    <div class="relative flex min-h-screen flex-col">
+    <div class="relative flex h-screen flex-col overflow-hidden">
         <Header />
-        <main class="min-h-0 flex-1">
+        <main class="min-h-0 flex-1 overflow-hidden">
             <router-view />
         </main>
     </div>

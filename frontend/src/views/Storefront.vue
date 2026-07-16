@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex min-h-screen w-full flex-row items-stretch">
+    <div class="relative flex h-full min-h-0 w-full flex-row items-stretch overflow-hidden">
         <img v-if="backgroundImage" :src="backgroundImage" class="absolute top-0 left-0 w-full h-full -z-10"/>
 
         <Transition
@@ -18,7 +18,7 @@
             </div>
         </Transition>
 
-        <div class="min-h-screen p-4 w-full max-w-7xl mx-auto mt-12 flex-1">
+        <div class="h-full min-h-0 p-4 w-full max-w-7xl mx-auto pt-12 flex-1 overflow-auto">
             <div class="flex flex-col gap-4">
                 <StorefrontCommission/>
                 <StorefrontDivider/>

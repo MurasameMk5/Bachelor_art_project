@@ -1,7 +1,9 @@
 <template>
-    <div class="mx-4 mt-8">
-        <span class="text-lg">Sketch client</span>
-        <OrderDetailBrief />
+    <div class="mx-4 py-8 flex h-full flex-col">
+        <span class="text-lg shrink-0">Sketch client</span>
+        <div class="overflow-y-auto px-4">
+            <OrderDetailBrief />
+        </div>
     </div>
 </template>
 
