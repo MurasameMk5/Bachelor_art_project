@@ -3,16 +3,19 @@
         <span class="text-lg shrink-0">Sketch client</span>
         <div class="overflow-y-auto px-4">
             <OrderDetailBrief />
+            <OrderDetailProduction />
         </div>
     </div>
 </template>
 
 <script>
 import OrderDetailBrief from './OrderDetailBrief.vue';
+import OrderDetailProduction from './OrderDetailProduction.vue';
 
 export default {
     components: {
-        OrderDetailBrief
+        OrderDetailBrief,
+        OrderDetailProduction,
     }
 }
 </script>

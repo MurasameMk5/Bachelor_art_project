@@ -24,10 +24,10 @@
                 <span class="text-gray-600">Insert files</span>
             </div>
         </div>
-        <div v-if="imagesSelected.length > 0" class="flex flex-row gap-4">
-            <div v-for="(image, i) in imagesSelected" @click="removeFile(i)" :key="i" class="w-20 h-20 relative">
+        <div v-if="imagesSelected.length > 0" class="flex flex-row gap-4 overflow-x-auto    ">
+            <div v-for="(image, i) in imagesSelected" @click="removeFile(i)" :key="i" class="relative flex-shrink-0">
                 <Icon icon="lucide:delete" class="absolute top-0 right-0 text-danger" />
-                <img :src="image" alt="Preview" class=" object-cover"/>
+                <img :src="image.url" alt="Preview" class="h-20"/>
             </div>
         </div>
         <div class="flex flex-row justify-between gap-2">
