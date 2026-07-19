@@ -1,10 +1,10 @@
 <template>
-    <div class="m-8">
-        <div v-if="!connected">
+    <div class="m-8 h-full">
+        <div v-if="!connected" class="flex flex-col gap-4 items-center justify-center h-full">
             <h1 class="text-xl text-center my-8">Art Commission platform</h1>
             <div class="flex flex-row gap-4 justify-around">
-                <button class="btn-secondary">sign up</button>
-                <button class="btn-secondary">sign in</button>
+                <button class="btn-secondary"><router-link to="/sign-up">sign up</router-link></button>
+                <button class="btn-secondary"><router-link to="/sign-in">sign in</router-link></button>
             </div>
         </div>
         <div v-else class="flex flex-col gap-4">
@@ -42,7 +42,7 @@ export default {
     },
     data() {
         return {
-            connected: true,
+            connected: false,
             doingOrders: [
                 { id: 1, type: "Character Sketch", step: "brief", deadline: "2026-08-30", client: "John" },
                 { id: 2, type: "Illustration", step: "sketch", deadline: "2026-09-15", client: "Aless" },

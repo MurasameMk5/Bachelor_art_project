@@ -12,6 +12,18 @@ const routes = [
     meta: { guest: true },
   },
   {
+   path: "/sign-in",
+   name: "sign-in",
+   component: () => import("../views/SignIn.vue"),
+   meta: { guest: true },
+  },
+  {
+      path: "/sign-up",
+      name: "sign-up",
+      component: () => import("../views/SignUp.vue"),
+      meta: { guest: true },
+  },
+  {
     path: "/storefront",
     name: "storefront",
     component: () => import("../views/Storefront.vue"),
