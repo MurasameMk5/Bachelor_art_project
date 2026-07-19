@@ -1,10 +1,12 @@
 <template>
-    <div class="m-8 h-full">
-        <div v-if="!connected" class="flex flex-col gap-4 items-center justify-center h-full">
-            <h1 class="text-xl text-center my-8">Art Commission platform</h1>
-            <div class="flex flex-row gap-4 justify-around">
-                <button class="btn-secondary"><router-link to="/sign-up">sign up</router-link></button>
-                <button class="btn-secondary"><router-link to="/sign-in">sign in</router-link></button>
+    <div class="h-full">
+        <div v-if="!connected" class="flex items-center justify-center h-full">
+            <div class="h-1/2 bg-tertiary-300 w-full flex flex-col gap-4 items-center justify-center">
+                <h1 class="text-3xl text-center my-8">Art Commission platform</h1>
+                <div class="flex flex-row gap-4 justify-around">
+                    <button class="btn-secondary-filled"><Link href="/sign-up">sign up</Link></button>
+                    <button class="btn-secondary"><Link href="/sign-in">sign in</Link></button>
+                </div>
             </div>
         </div>
         <div v-else class="flex flex-col gap-4">
@@ -13,7 +15,7 @@
             <div>
                 <span> Work in progress</span>
                 <div class="flex flex-row gap-4 justify-center">
-                    <router-link v-for="doingOrder in doingOrders" :key="doingOrder.id" :to="`/order/${doingOrder.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
+                    <Link v-for="doingOrder in doingOrders" :key="doingOrder.id" :href="`/order/${doingOrder.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
                         <div class="flex flex-row gap-2 bg-secondary rounded-t-md text-white p-2">
                             <span>{{ doingOrder.type }}</span> - <span>{{ doingOrder.client }}</span>
                         </div>
@@ -24,7 +26,7 @@
                             <Icon icon="lucide:calendar" />
                             <span> {{ doingOrder.deadline }}</span>
                         </div>
-                    </router-link>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -34,15 +36,20 @@
 <script>
 import StorefrontKanban from '@/components/StorefrontKanban.vue';
 import { Icon } from '@iconify/vue';
+import { Head, Link } from '@inertiajs/vue3';
+import App from '../App.vue';
 
 export default {
+    layout: App,
     components: {
         StorefrontKanban,
         Icon,
+        Head,
+        Link,
     },
     data() {
         return {
-            connected: false,
+            connected: true,
             doingOrders: [
                 { id: 1, type: "Character Sketch", step: "brief", deadline: "2026-08-30", client: "John" },
                 { id: 2, type: "Illustration", step: "sketch", deadline: "2026-09-15", client: "Aless" },

@@ -18,8 +18,13 @@
             </div>
         </Transition>
 
-        <div class="h-full min-h-0 p-4 w-full max-w-7xl mx-auto pt-12 flex-1 overflow-auto">
-            <div class="flex flex-col gap-4">
+
+        <div class="h-full min-h-0 p-4 w-full max-w-7xl mx-auto flex-1 overflow-auto">
+            <div class=" flex gap-4 justify-end">
+                <button @click="sidebarActive = true" class="btn-secondary">Components</button>
+                <button class="btn-secondary">Preview</button>
+            </div>
+            <div class="flex flex-col gap-4 pt-8">
                 <StorefrontCommission/>
                 <StorefrontDivider/>
                 <StorefrontKanban/>
@@ -28,10 +33,6 @@
             </div>
         </div>
 
-        <div class="absolute top-4 right-4 z-20 flex gap-4 justify-end">
-            <button @click="sidebarActive = true" class="btn-secondary">Components</button>
-            <button class="btn-secondary">Preview</button>
-        </div>
     </div>
 </template>
 
@@ -42,8 +43,10 @@ import StorefrontDivider from "@/components/StorefrontDivider.vue";
 import StorefrontKanban from "@/components/StorefrontKanban.vue";
 import StorefrontImage from "@/components/StorefrontImage.vue";
 import StorefrontText from "@/components/StorefrontText.vue";
+import App from "../App.vue";
 
 export default {
+    layout: App,
     components: {
         StorefrontSidebar,
         StorefrontCommission,

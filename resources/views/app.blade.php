@@ -1,21 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html>
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts & Styles (Vite ou Laravel Mix) -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/app.js', 'resources/css/app.css'])
+        <x-inertia::head />
     </head>
-    <body class="font-sans antialiased">
-        <div id="app">
-            <!-- Votre application Vue sera montée ici -->
-        </div>
+    <body>
+        <x-inertia::app />
     </body>
 </html>

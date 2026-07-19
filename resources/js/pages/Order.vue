@@ -12,11 +12,19 @@
 <script>
 import OrderChat from '@/components/OrderChat.vue';
 import OrderDetail from '@/components/OrderDetail.vue';
+import App from '../App.vue';
 
 export default {
+    layout: App,
     components: {
         OrderChat,
         OrderDetail,
+    },
+    props: {
+        id: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
@@ -32,7 +40,7 @@ export default {
     },
     methods: {},
     mounted() {
-        const orderId = this.$route.params.id;
+        const orderId = this.id;
     },
 };
 </script>

@@ -10,17 +10,17 @@
     },
     "dependencies": {
         "@formkit/auto-animate": "^0.9.0",
+        "@inertiajs/vite": "^3.6.1",
+        "@inertiajs/vue3": "^3.6.1",
         "@tiptap/extension-text-align": "^3.27.4",
         "@tiptap/starter-kit": "^3.27.4",
         "@tiptap/vue-3": "^3.27.4",
         "html2pdf.js": "^0.14.0",
         "pinia": "^3.0.4",
-        "vue": "^3.5.38",
-        "vue-router": "^5.1.0"
+        "vue": "^3.5.38"
     },
     "devDependencies": {
         "@iconify/vue": "^5.0.1",
-        "@inertiajs/vue3": "^2.0.0",
         "@tailwindcss/typography": "^0.5.20",
         "@tailwindcss/vite": "^4.3.2",
         "@vitejs/plugin-vue": "^6.0.7",

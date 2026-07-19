@@ -2,7 +2,7 @@
     <div class="relative flex h-screen flex-col overflow-hidden">
         <Header />
         <main class="min-h-0 flex-1 overflow-hidden">
-            <router-view />
+            <slot/>
         </main>
     </div>
 </template>
