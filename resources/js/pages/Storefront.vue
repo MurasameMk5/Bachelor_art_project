@@ -43,10 +43,10 @@ import StorefrontDivider from "@/components/StorefrontDivider.vue";
 import StorefrontKanban from "@/components/StorefrontKanban.vue";
 import StorefrontImage from "@/components/StorefrontImage.vue";
 import StorefrontText from "@/components/StorefrontText.vue";
-import App from "../App.vue";
+import MainLayout from "../layouts/MainLayout.vue";
 
 export default {
-    layout: App,
+    layout: MainLayout,
     components: {
         StorefrontSidebar,
         StorefrontCommission,

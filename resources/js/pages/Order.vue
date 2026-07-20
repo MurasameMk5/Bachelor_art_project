@@ -12,10 +12,10 @@
 <script>
 import OrderChat from '@/components/OrderChat.vue';
 import OrderDetail from '@/components/OrderDetail.vue';
-import App from '../App.vue';
+import MainLayout from '../layouts/MainLayout.vue';
 
 export default {
-    layout: App,
+    layout: MainLayout,
     components: {
         OrderChat,
         OrderDetail,
