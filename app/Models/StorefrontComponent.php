@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(["id", "storefront_id", "type", "position", "content", "is_visible"])]
 class StorefrontComponent extends Model
 {
-    //
+    public function storefront()
+    {
+        return $this->belongsTo(Storefront::class);
+    }
 }

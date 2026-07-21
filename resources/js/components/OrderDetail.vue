@@ -1,6 +1,6 @@
 <template>
     <div class="mx-4 py-8 flex h-full flex-col">
-        <span class="text-lg shrink-0">Sketch client</span>
+        <span class="text-lg shrink-0"> {{order.production_stage}} client</span>
         <div class="overflow-y-auto px-4">
             <OrderDetailBrief />
             <OrderDetailProduction />
@@ -16,6 +16,12 @@ export default {
     components: {
         OrderDetailBrief,
         OrderDetailProduction,
+    },
+    props: {
+        order: {
+            type: Object,
+            required: true,
+        },
     }
 }
 </script>

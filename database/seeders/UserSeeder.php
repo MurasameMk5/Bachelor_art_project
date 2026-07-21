@@ -14,21 +14,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['artist', 'client'];
-
-        for ($i = 1; $i <= 10; $i++) {
-            $role = $roles[$i % 2]; // alterne artist/client
-
-            DB::table('users')->insert([
-                'name' => "User $i " . ($role === 'artist' ? 'Artist' : 'Client'),
-                'email' => "user{$i}@example.com",
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'),
-                'role' => $role,
-                'remember_token' => Str::random(10),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        DB::table('users')->insert([
+            'name' => "Aless",
+            'email' => "alessand.neris@hes-so.ch",
+            'password' => Hash::make('xillia27'),
+            'role' => "artist",
+        ]);
+        DB::table('users')->insert([
+            'name' => "Aleeeess",
+            'email' => "aleess.neris@hes-so.ch",
+            'password' => Hash::make('xillia27'),
+            'role' => "client",
+        ]);
     }
 }

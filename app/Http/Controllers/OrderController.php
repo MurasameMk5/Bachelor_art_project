@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Attributes\Controllers\Authorize;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
-    public function show($id)
+    #[Authorize('view', 'order')]
+    public function show(Request $request, Order $order)
     {
+
         return Inertia::render('Order', [
-            'id' => $id
+            'order' => $order
         ]);
     }
 }

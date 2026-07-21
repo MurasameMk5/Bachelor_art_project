@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(["id", "order_id", "private_storage_path", "revision_number", "status"])]
 class Deliverable extends Model
 {
-    //
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

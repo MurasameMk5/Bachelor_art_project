@@ -30,4 +30,29 @@ class User extends Authenticatable
             "password" => "hashed",
         ];
     }
+
+    public function commissions()
+        {
+            return $this->hasMany(Commission::class, 'artist_id');
+        }
+
+        public function ordersAsArtist()
+        {
+            return $this->hasMany(Order::class, 'artist_id');
+        }
+
+        public function ordersAsClient()
+        {
+            return $this->hasMany(Order::class, 'client_id');
+        }
+
+        public function messages()
+        {
+            return $this->hasMany(Message::class, 'sender_id');
+        }
+
+        public function storefront()
+        {
+            return $this->hasOne(Storefront::class);
+        }
 }

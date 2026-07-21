@@ -21,7 +21,7 @@ class StorefrontSeeder extends Seeder
             return;
         }
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $artistIds->count(); $i++) {
             DB::table('storefronts')->insert([
                 'user_id' => $artistIds[$i % $artistIds->count()],
                 'slug' => Str::slug("artist-storefront-$i") . '-' . Str::random(4),

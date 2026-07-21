@@ -55,6 +55,12 @@ export default {
         StorefrontImage,
         StorefrontText,
     },
+    props: {
+        storefront: {
+            type: Object,
+            required: true,
+        },
+    },
     data() {
         return {
             sidebarActive: false,
@@ -78,5 +84,8 @@ export default {
             ]
         };
     },
+    mounted() {
+        console.log(this.storefront);
+    }
 };
 </script>

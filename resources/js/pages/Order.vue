@@ -4,7 +4,7 @@
             <OrderChat :chats="chats" />
         </div>
         <div class="basis-3/4 h-full min-h-0">
-            <OrderDetail />
+            <OrderDetail :order="order"/>
         </div>
     </div>
 </template>
@@ -25,6 +25,10 @@ export default {
             type: Number,
             required: true,
         },
+        order: {
+            type: Object,
+            required: true,
+        }
     },
     data() {
         return {
@@ -41,6 +45,7 @@ export default {
     methods: {},
     mounted() {
         const orderId = this.id;
+        console.log(this.order);
     },
 };
 </script>

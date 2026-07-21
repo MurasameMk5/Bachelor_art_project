@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(["id", "commission_id", "storage_path", "order_position", "caption"])]
 class CommissionImage extends Model
 {
-    //
+    public function commission()
+    {
+        return $this->belongsTo(Commission::class);
+    }
 }

@@ -43,7 +43,6 @@ export default {
             this.form.post('/register', {
                 onSuccess: () => {
                     console.log("Registration successful");
-                    this.$inertia.visit('/login');
                 },
                 onFinish: () => {
                     this.form.reset()

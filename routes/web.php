@@ -1,21 +1,25 @@
 <?php
 
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StorefrontController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Home');
 });
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware('auth');
+})->middleware(['auth:sanctum', 'can:artist']);
 
-Route::get('/storefront', function () {
-    return Inertia::render('Storefront');
-})->middleware('auth');
+Route::get('/storefront',[StorefrontController::class, 'show'])->middleware(['auth:sanctum', 'can:artist']);
+
 Route::get('/request', function () {
     return Inertia::render('Request');
-})->middleware('auth');
-Route::get('/order/{id}', function ($id) {
-    return Inertia::render('Order', ['id' => $id]);
-})->middleware('auth');
+})->middleware(['auth:sanctum', 'can:artist']);
+
+Route::get('/order/{order}', [OrderController::class, 'show'])->middleware('auth:sanctum');
+
+Route::get('/profile', [UserController::class, 'show'])->middleware('auth:sanctum');

@@ -31,7 +31,6 @@ export default {
             this.form.post('/login', {
                 onSuccess: () => {
                     console.log("Login successful");
-                    this.$inertia.visit('/dashboard');
                 },
                 onFinish: () => {
                     this.form.reset()

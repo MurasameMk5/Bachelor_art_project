@@ -1,17 +1,18 @@
 <template>
-    <div
+    <div v-if="$page.props.auth.user"
         class="border-b border-b-secondary px-4 mt-2  sm:px-8 lg:px-12 flex flex-row justify-between"
     >
         <div
-        class="flex flex-row gap-6 py-4 text-sm sm:gap-10  lg:gap-12 "
+        class="flex flex-row gap-6 py-4 text-sm sm:gap-10  lg:gap-12 items-center "
         >
-            <Link href="/dashboard" :class="{'text-tertiary font-bold': isActive('/dashboard')}"
+            <span class="border-2 border-dashed border-tertiary p-2 rounded-lg"> Art commission Logo</span>
+            <Link href="/dashboard" v-if="$page.props.auth.user.role === 'artist'" :class="{'text-tertiary font-bold': isActive('/dashboard')}"
                 >Dashboard</Link
             >
-            <Link href="/request" :class="{ 'text-tertiary font-bold': isActive('/request')}"
+            <Link href="/request" v-if="$page.props.auth.user.role === 'artist'" :class="{ 'text-tertiary font-bold': isActive('/request')}"
                 > Request </Link
             >
-            <Link href="/storefront" :class="{'text-tertiary font-bold' : isActive('/storefront')}"
+            <Link href="/storefront" v-if="$page.props.auth.user.role === 'artist'" :class="{'text-tertiary font-bold' : isActive('/storefront')}"
                 >Storefront</Link
             >
         </div>
