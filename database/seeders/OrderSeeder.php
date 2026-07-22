@@ -22,8 +22,8 @@ class OrderSeeder extends Seeder
             return;
         }
 
-        $statuses = ['pending_payment', 'active', 'active', 'completed', 'cancelled', 'disputed'];
-        $stages = ['brief', 'sketch', 'revision', 'final'];
+        $statuses = ['to do', 'doing', 'done'];
+        $stages = ['brief', 'sketch', 'revision', 'final', 'awaiting_payment'];
 
         for ($i = 1; $i <= 10; $i++) {
             $commission = $commissions[$i % $commissions->count()];
@@ -39,6 +39,7 @@ class OrderSeeder extends Seeder
                 'current_revision_count' => rand(0, $commission->max_free_revisions),
                 'status' => $statuses[$i % count($statuses)],
                 'production_stage' => $stages[$i % count($stages)],
+                'awaiting_confirmation' => rand(0, 1) === 1,
                 'invoice_number' => sprintf('INV-2026-%04d', $i),
                 'invoice_generated_at' => now(),
                 'created_at' => now(),

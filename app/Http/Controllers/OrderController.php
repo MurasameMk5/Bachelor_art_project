@@ -9,8 +9,19 @@ use Inertia\Inertia;
 
 class OrderController extends Controller
 {
+    
+    #[Authorize('viewAny', Order::class)]
+    public function index()
+    {
+        $orders = Order::with(['artist', 'client', 'commission'])->get();
+        
+        return Inertia::render('Dashboard', [
+            'orders' => $orders
+            ]);
+    }
+            
     #[Authorize('view', 'order')]
-    public function show(Request $request, Order $order)
+    public function show(Order $order)
     {
 
         return Inertia::render('Order', [

@@ -1,6 +1,16 @@
 <template>
     <div class="flex justify-center">
-        <span> Click here to type your text.</span>
+        <span> {{ text }} </span>
     </div>
 </template>
 
+<script>
+export default {
+    props: {
+        text: {
+            type: String,
+            required: true
+        }
+    }
+}
+</script>

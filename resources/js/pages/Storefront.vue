@@ -25,11 +25,13 @@
                 <button class="btn-secondary">Preview</button>
             </div>
             <div class="flex flex-col gap-4 pt-8">
-                <StorefrontCommission/>
-                <StorefrontDivider/>
-                <StorefrontKanban/>
-                <StorefrontImage :images="this.images" />
-                <StorefrontText/>
+                <div v-for="(component, index) in storefront.components" :key="index">
+                    <StorefrontCommission v-if="component.type === 'commission'" :commission="component.content" />
+                    <StorefrontDivider v-if="component.type === 'divider'" />
+                    <StorefrontKanban v-if="component.type === 'kanban'" :orders="component.content.orders" />
+                    <StorefrontImage v-if="component.type === 'image'" :images="component.content.images" />
+                    <StorefrontText v-if="component.type === 'text'" :text="component.content.text" />
+                </div>
             </div>
         </div>
 
@@ -60,6 +62,10 @@ export default {
             type: Object,
             required: true,
         },
+        orders: {
+            type: Array,
+            required: true,
+        },
     },
     data() {
         return {
@@ -86,6 +92,7 @@ export default {
     },
     mounted() {
         console.log(this.storefront);
+        this.storefront.components.sort((a, b) => a.position - b.position);
     }
 };
 </script>

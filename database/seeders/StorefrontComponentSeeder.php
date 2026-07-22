@@ -25,7 +25,7 @@ class StorefrontComponentSeeder extends Seeder
         $contentByType = [
             'commission' => fn () => ['commission_id' => rand(1, 10)],
             'text' => fn () => ['text' => 'Bienvenue sur ma vitrine, contactez-moi pour toute commande.'],
-            'image' => fn () => ['image_ref' => '/images/sample.png', 'label' => 'Exemple de travail'],
+            'image' => fn () => ['images' => [['ref' => '/Akihiko Yoshida-min.png', 'label' => 'Exemple de travail']]],
             'kanban' => fn () => ['columns' => ['A faire', 'En cours', 'Terminé']],
             'divider' => fn () => [],
         ];

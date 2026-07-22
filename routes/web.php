@@ -10,9 +10,7 @@ Route::get('/', function () {
     return Inertia::render('Home');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth:sanctum', 'can:artist']);
+Route::get('/dashboard', [OrderController::class, 'index'])->middleware(['auth:sanctum', 'can:artist']);
 
 Route::get('/storefront',[StorefrontController::class, 'show'])->middleware(['auth:sanctum', 'can:artist']);
 

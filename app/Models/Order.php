@@ -5,9 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(["id", "artist_id", "client_id", "base_price", "final_price", "max_free_revision_count", "current_revision_count", "invoice_number", "invoice_generated_at"])]
+#[Fillable(["id", "artist_id", "client_id", "base_price", "final_price", "max_free_revision_count", "current_revision_count", "awaiting_confirmation", "invoice_number", "invoice_generated_at"])]
 class Order extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'awaiting_confirmation' => 'boolean',
+        ];
+    }
     public function artist()
     {
         return $this->belongsTo(User::class, 'artist_id');

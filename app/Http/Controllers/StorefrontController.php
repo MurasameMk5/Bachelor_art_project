@@ -12,6 +12,7 @@ class StorefrontController extends Controller
     {
         return inertia('Storefront', [
             'storefront' => $request->user()->storefront->with('components')->first(),
+            'orders' => $request->user()->ordersAsArtist()->with('commission', 'client')->get(),
         ]);
     }
 }

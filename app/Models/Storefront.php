@@ -17,4 +17,5 @@ class Storefront extends Model
     {
         return $this->hasMany(StorefrontComponent::class);
     }
+
 }
