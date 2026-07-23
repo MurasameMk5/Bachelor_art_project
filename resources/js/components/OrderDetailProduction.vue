@@ -45,6 +45,12 @@ export default {
     components: {
         Icon,
     },    
+    props: {
+        order: {
+            type: Object,
+            required: true,
+        },
+    },
     data() {
         return {
             imagesSelected: [],

@@ -25,7 +25,7 @@ class OrderController extends Controller
     {
 
         return Inertia::render('Order', [
-            'order' => $order
+            'order' => $order->load(['artist', 'client', 'commission', 'messages.sender', 'contract', 'answers', 'escrow', 'deliverables']),
         ]);
     }
 }

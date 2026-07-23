@@ -23,7 +23,7 @@ class OrderSeeder extends Seeder
         }
 
         $statuses = ['to do', 'doing', 'done'];
-        $stages = ['brief', 'sketch', 'revision', 'final', 'awaiting_payment'];
+        $stages = ['brief', 'production', 'revision', 'awaiting_payment'];
 
         for ($i = 1; $i <= 10; $i++) {
             $commission = $commissions[$i % $commissions->count()];

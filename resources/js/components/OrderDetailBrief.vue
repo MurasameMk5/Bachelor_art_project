@@ -1,6 +1,6 @@
 <template>
     <div>
-        <OrderDetailInfo/>
+        <OrderDetailInfo name="brief" v-if="order.awaiting_confirmation"/>
         <div class="bg-tertiary-300 p-2 my-4 rounded-md">
             <span class="text-lg">Brief</span>
         </div>
@@ -158,6 +158,12 @@ export default {
         EditorContent,
     Icon,
     OrderDetailInfo,
+    },
+    props: {
+        order: {
+            type: Object,
+            required: true,
+        },
     },
     data() {
         return {

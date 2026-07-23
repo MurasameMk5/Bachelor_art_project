@@ -1,10 +1,10 @@
 <template>
     <div class="border-r-2 border-r-secondary px-4 pt-8 flex h-full min-h-0 flex-col">
         <span class="text-lg shrink-0">Chat</span>
-        <div class="flex-1 min-h-0 px-4 overflow-y-auto">
-            <OrderChatStage/>
+        <div v-for="(chat, index) in chats" :key="index" class="flex-1 min-h-0 px-4 overflow-y-auto">
+            <OrderChatStage :stage="chat.content.production_stage" />
             <div class="flex flex-col gap-4">
-                <OrderChatBubble v-for="(chat, index) in chats" :key="index" :chat="chat" />
+                <OrderChatBubble v-for="(text, index) in chat.content.text" :key="index" :chat="chat" />
             </div>
         </div>
         
@@ -25,7 +25,12 @@ export default {
         OrderChatInput,
         OrderChatStage,
     },
-    props: ['chats'],
+    props: {
+        chats: {
+            type: Array,
+            required: true,
+        },
+    },
     data() {
         return {
         };

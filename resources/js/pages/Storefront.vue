@@ -28,7 +28,7 @@
                 <div v-for="(component, index) in storefront.components" :key="index">
                     <StorefrontCommission v-if="component.type === 'commission'" :commission="component.content" />
                     <StorefrontDivider v-if="component.type === 'divider'" />
-                    <StorefrontKanban v-if="component.type === 'kanban'" :orders="component.content.orders" />
+                    <StorefrontKanban v-if="component.type === 'kanban'" :orders="orders" />
                     <StorefrontImage v-if="component.type === 'image'" :images="component.content.images" />
                     <StorefrontText v-if="component.type === 'text'" :text="component.content.text" />
                 </div>

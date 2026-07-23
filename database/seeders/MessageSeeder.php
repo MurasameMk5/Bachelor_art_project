@@ -22,16 +22,16 @@ class MessageSeeder extends Seeder
         }
 
         $contents = [
-            'Bonjour, je viens de valider ma commande, hâte de voir le résultat !',
-            'Merci pour votre commande, je commence le brouillon dès demain.',
-            'Voici un premier croquis, dites-moi ce que vous en pensez.',
-            'J\'aimerais changer la couleur des cheveux si possible.',
-            'Pas de souci, je vous envoie une nouvelle version sous peu.',
-            'C\'est parfait, j\'adore le résultat !',
-            'Petite question sur le délai de livraison restant.',
-            'La livraison est prévue pour la fin de semaine.',
-            'Merci beaucoup pour votre travail, à bientôt pour une prochaine commande.',
-            'N\'hésitez pas si vous avez d\'autres retours à faire.',
+            ['production_stage' => 'brief', 'text' => 'Bonjour, je viens de valider ma commande, hâte de voir le résultat !'],
+            ['production_stage' => 'production', 'text' => 'J\'ai commencé à travailler sur votre commande, je vous tiendrai au courant de l\'avancement.'],
+            ['production_stage' => 'revision', 'text' => 'J\'ai terminé la première version, pouvez-vous me donner vos retours ?'],
+            ['production_stage' => 'awaiting_payment', 'text' => 'Merci pour votre travail ! Je vais procéder au paiement maintenant.'],
+            ['production_stage' => 'brief', 'text' => 'Je suis impatient de voir le résultat final !'],
+            ['production_stage' => 'production', 'text' => 'Je rencontre un petit problème technique, je vais devoir prendre un peu plus de temps.'],
+            ['production_stage' => 'revision', 'text' => 'J\'ai apporté les modifications demandées, pouvez-vous vérifier ?'],
+            ['production_stage' => 'awaiting_payment', 'text' => 'Le paiement a été effectué, merci pour votre travail !'],
+            ['production_stage' => 'brief', 'text' => 'Je viens de valider la commande, merci !'],
+            ['production_stage' => 'production', 'text' => 'La commande est presque terminée, je vous enverrai un aperçu bientôt.'],
         ];
 
         for ($i = 1; $i <= 10; $i++) {
@@ -41,7 +41,7 @@ class MessageSeeder extends Seeder
             DB::table('messages')->insert([
                 'order_id' => $order->id,
                 'sender_id' => $sender,
-                'content' => $contents[$i - 1],
+                'content' => json_encode($contents[$i - 1]),
                 'attachment_path' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
