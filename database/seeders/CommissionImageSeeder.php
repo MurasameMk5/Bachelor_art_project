@@ -27,7 +27,7 @@ class CommissionImageSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             DB::table('commission_images')->insert([
                 'commission_id' => $commissionIds[$i % $commissionIds->count()],
-                'storage_path' => "public/commissions/example-$i.png",
+                'storage_path' => "/Kamome Shirahama-min.png",
                 'caption' => "Exemple de travail #$i",
                 'created_at' => now(),
                 'updated_at' => now(),

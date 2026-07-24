@@ -1,7 +1,7 @@
 <template>
     <div class="flex h-full min-h-0 flex-row">
         <div class="md:basis-1/4 min-w-60 min-h-0">
-            <OrderChat :chats="order.messages" />
+            <OrderChat :chats="order.messages" :user="user" />
         </div>
         <div class="basis-3/4 h-full min-h-0">
             <OrderDetail :order="order"/>
@@ -31,6 +31,10 @@ export default {
         },
         messages: {
             type: Array,
+            required: true,
+        },
+        user: {
+            type: Object,
             required: true,
         },
     },

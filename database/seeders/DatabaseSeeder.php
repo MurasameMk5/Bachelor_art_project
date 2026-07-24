@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             StorefrontSeeder::class,
-            StorefrontComponentSeeder::class,
             CommissionSeeder::class,
             CommissionImageSeeder::class,
+            StorefrontComponentSeeder::class,
             QuestionSeeder::class,
             OrderSeeder::class,
             AnswerSeeder::class,

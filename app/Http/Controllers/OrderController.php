@@ -21,11 +21,12 @@ class OrderController extends Controller
     }
             
     #[Authorize('view', 'order')]
-    public function show(Order $order)
+    public function show(Request $request, Order $order)
     {
 
         return Inertia::render('Order', [
-            'order' => $order->load(['artist', 'client', 'commission', 'messages.sender', 'contract', 'answers', 'escrow', 'deliverables']),
+            'order' => $order->load(['artist', 'client', 'commission.questions', 'messages.sender', 'contract', 'answers.question', 'escrow', 'deliverables']),
+            'user' => $request->user(),
         ]);
     }
 }

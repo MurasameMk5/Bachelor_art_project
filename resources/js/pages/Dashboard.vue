@@ -1,10 +1,10 @@
 <template>
-    <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-4 p-4 w-4/5 overflow-y-auto h-full mx-auto">
         <span> Command list</span>
         <StorefrontKanban :orders="orders" />
-        <div>
+        <div class="flex flex-col gap-4">
             <span> Work in progress</span>
-            <div class="flex flex-row gap-4 justify-center">
+            <div class="flex gap-4 justify-center flex-wrap">
                 <Link v-for="order in orders" :key="order.id" :href="`/order/${order.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
                     <div class="flex flex-row gap-2 bg-secondary rounded-t-md text-white p-2">
                         <span>{{ order.commission.title }}</span> - <span>{{ order.client.name }}</span>

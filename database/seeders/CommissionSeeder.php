@@ -31,6 +31,7 @@ class CommissionSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             DB::table('commissions')->insert([
                 'artist_id' => $artistIds[$i % $artistIds->count()],
+                'component_id' => null, // Sera lié lors de la création du composant
                 'title' => $titles[$i - 1],
                 'description' => "Description détaillée de la commission : {$titles[$i - 1]}.",
                 'base_price' => rand(20, 200) * 10,

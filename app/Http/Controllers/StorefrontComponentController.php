@@ -6,5 +6,7 @@ use Illuminate\Http\Request;
 
 class StorefrontComponentController extends Controller
 {
-    //
+    public function update(){
+        
+    }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StorefrontController;
+use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,4 +21,7 @@ Route::get('/request', function () {
 
 Route::get('/order/{order}', [OrderController::class, 'show'])->middleware('auth:sanctum');
 
+Route::get('/order/{order}/orderform', [CommissionController::class, 'show'])->middleware('auth:sanctum');
+
 Route::get('/profile', [UserController::class, 'show'])->middleware('auth:sanctum');
+

@@ -19,4 +19,8 @@ class StorefrontComponent extends Model
     {
         return $this->belongsTo(Storefront::class);
     }
+    public function commission()
+    {
+        return $this->hasOne(Commission::class, 'component_id');
+    }
 }

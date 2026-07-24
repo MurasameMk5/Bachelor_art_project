@@ -21,19 +21,11 @@
         <div class="flex flex-col gap-4 p-2" v-if="!brief_view">
             <div class="flex flex-col gap-2">
                 <label for="client" class="block ml-2">Client</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" placeholder="client"/>
+                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="order.client.name"/>
             </div>
-            <div class="flex flex-col gap-2">
-                <label for="question1" class="block ml-2">Question 1</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" placeholder="client"/>
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="question2" class="block ml-2">Question 2</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" placeholder="client"/>
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="question3" class="block ml-2">Question 3</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" placeholder="client"/>
+            <div v-for="answer in order.answers" :key="answer.id" class="flex flex-col gap-2">
+                <label :for="`question${answer.question_id}`" class="block ml-2"> {{ answer.question?.text }}</label>
+                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="answer.value"/>
             </div>
         </div>
 
@@ -137,7 +129,10 @@
             </div>
         </div>
         <div class="flex place-content-end py-4">
-            <button class="btn-secondary-filled">
+            <button v-if="order.awaiting_confirmation" inactive class="btn-secondary-filled bg-secondary-300 border-secondary-300">
+                <span>Send brief</span>
+            </button>
+            <button v-else class="btn-secondary-filled">
                 <span>Send brief</span>
             </button>
         </div>

@@ -22,15 +22,15 @@
         <div class="h-full min-h-0 p-4 w-full max-w-7xl mx-auto flex-1 overflow-auto">
             <div class=" flex gap-4 justify-end">
                 <button @click="sidebarActive = true" class="btn-secondary">Components</button>
-                <button class="btn-secondary">Preview</button>
+                <button @click="preview = !preview" class="btn-secondary">Preview</button>
             </div>
             <div class="flex flex-col gap-4 pt-8">
                 <div v-for="(component, index) in storefront.components" :key="index">
-                    <StorefrontCommission v-if="component.type === 'commission'" :commission="component.content" />
+                    <StorefrontCommission v-if="component.type === 'commission'" :commission="component.commission" />
                     <StorefrontDivider v-if="component.type === 'divider'" />
                     <StorefrontKanban v-if="component.type === 'kanban'" :orders="orders" />
                     <StorefrontImage v-if="component.type === 'image'" :images="component.content.images" />
-                    <StorefrontText v-if="component.type === 'text'" :text="component.content.text" />
+                    <StorefrontText v-if="component.type === 'text'" :text="component.content.text" :preview="preview" />
                 </div>
             </div>
         </div>
@@ -71,6 +71,7 @@ export default {
         return {
             sidebarActive: false,
             backgroundImage: null,
+            preview: false,
             images: [
                 {
                     image_ref: "./../../Kamome Shirahama-min.png",

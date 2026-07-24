@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('artist_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('component_id')->nullable()->constrained('storefront_components')->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
             $table->unsignedInteger('base_price');
