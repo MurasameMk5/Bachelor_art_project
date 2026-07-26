@@ -10,7 +10,7 @@
             />
         </div>
         <div v-auto-animate class="w-full">
-            <div v-if="store.getPage === MenuPages.GLOBAL">
+            <div v-if="storefrontStore.getPage === MenuPages.GLOBAL">
                 <span class="text-lg">Global parameters</span>
                 <div class="flex flex-col gap-4 my-4 mb-20">
                     <div class="mx-2 flex flex-row justify-between gap-3 sm:mx-4 sm:gap-4">
@@ -36,19 +36,19 @@
             <div v-else>
                 <div class="flex flex-row items-center gap-4 mb-4">
                     <Icon
-                        @click="store.setPage(MenuPages.GLOBAL)"
+                        @click="storefrontStore.setPage(MenuPages.GLOBAL)"
                         icon="lucide:arrow-left"
                         class="w-6 h-6"
                     />
-                    <span class="text-lg">{{ store.getPage }}</span>
+                    <span class="text-lg">{{ storefrontStore.getPage }}</span>
                 </div>
-                <div v-if="store.getPage === MenuPages.COMMISSION">
+                <div v-if="storefrontStore.getPage === MenuPages.COMMISSION">
                     <StorefrontCommissionForm />
                 </div>
-                <div v-if="store.getPage === MenuPages.TOS">
+                <div v-if="storefrontStore.getPage === MenuPages.TOS">
                     <StorefrontTosForm />
                 </div>
-                <div v-if="store.getPage === MenuPages.IMAGE">
+                <div v-if="storefrontStore.getPage === MenuPages.IMAGE">
                     <StorefrontImageForm />
                 </div>
             </div>
@@ -73,7 +73,7 @@ export default {
     data() {
         return {
             MenuPages,
-            store: useStorefrontStore(),
+            storefrontStore: useStorefrontStore(),
             components: [
                 { type: "commission", label: "Commission", icon: "lucide:form" },
                 {
@@ -92,19 +92,21 @@ export default {
         changePage(componentType) {
             switch (componentType) {
                 case "commission":
-                    this.store.setPage(MenuPages.COMMISSION);
+                    this.storefrontStore.setPage(MenuPages.COMMISSION);
                     break;
                 case "tos":
-                    this.store.setPage(MenuPages.TOS);
+                    this.storefrontStore.setPage(MenuPages.TOS);
                     break;
                 case "image":
-                    this.store.setPage(MenuPages.IMAGE);
+                    this.storefrontStore.setPage(MenuPages.IMAGE);
                     break;
             }
         },
     },
     mounted() {
-        this.store.setPage(MenuPages.GLOBAL);
+    },
+    unmounted() {
+        this.storefrontStore.clearData();
     },
 };
 </script>

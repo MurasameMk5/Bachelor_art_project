@@ -42,7 +42,7 @@ class StorefrontComponentSeeder extends Seeder
             } else {
                 $content = match ($type) {
                     'text' => ['text' => 'Bienvenue sur ma vitrine, contactez-moi pour toute commande.'],
-                    'image' => ['images' => [['ref' => '/Akihiko Yoshida-min.png', 'label' => 'Exemple de travail']]],
+                    'image' => ['image_nb' => 1, 'images' => [['ref' => '/Akihiko Yoshida-min.png', 'label' => 'Exemple de travail']]],
                     'kanban' => ['columns' => ['A faire', 'En cours', 'Terminé']],
                     'divider' => [],
                     default => [],

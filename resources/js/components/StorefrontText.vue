@@ -1,12 +1,15 @@
 <template>
-    <div v-if="preview" class="flex justify-center">
+    <div v-if="preview || $page.props.auth.user.id !== artist" class="flex justify-center">
         <span> {{ text }} </span>
     </div>
-    <textarea v-else class="bg-slate-50 border-slate-200 border rounded-md w-full p-2 field-sizing-content" v-model="typedText">
-    </textarea>
+    <div v-else class="component-border">
+        <StorefrontComponentHeader header="Text component" />
+        <textarea class="bg-slate-50 border-slate-200 border rounded-md w-full p-2 field-sizing-content" v-model="typedText"></textarea>
+    </div>
 </template>
 
 <script>
+import StorefrontComponentHeader from './StorefrontComponentHeader.vue';
 export default {
     props: {
         text: {
@@ -16,7 +19,14 @@ export default {
         preview: {
             type: Boolean,
             default: false
+        },
+        artist: {
+            type: Number,
+            required: true
         }
+    },
+    components: {
+        StorefrontComponentHeader
     },
     data() {
         return {

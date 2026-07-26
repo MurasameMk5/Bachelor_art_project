@@ -9,9 +9,8 @@ use App\Models\Commission;
 
 class CommissionController extends Controller
 {
-    public function show(Request $request, Commission $commission)
+    public function show(Request $request, string $storefrontSlug, Commission $commission)
     {
-
         return Inertia::render('OrderForm', [
             'commission' => $commission->load(['artist', 'images']),
             'user' => $request->user(),

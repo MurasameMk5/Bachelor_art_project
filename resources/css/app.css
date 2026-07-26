@@ -42,7 +42,12 @@
     .btn-secondary-filled {
         @apply border-2 border-secondary bg-secondary rounded-lg p-2 text-white hover:bg-secondary-300 hover:border-secondary-300 transition-colors;
     }
-
+    .component-border {
+        @apply w-full flex flex-col rounded-xl relative border-secondary border-3 p-2 pt-4;
+    }
+    .component-title{
+        @apply bg-white absolute -top-4 left-5 px-4 text-secondary font-bold text-lg;
+    }
     .toolbar-btn {
         @apply flex items-center justify-center w-8 h-8 rounded-md text-slate-500 transition-colors;
     }
