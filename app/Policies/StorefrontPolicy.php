@@ -27,9 +27,9 @@ class StorefrontPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Storefront $storefront): bool
     {
-        return false;
+        return $user->id === $storefront->user_id;
     }
 
     /**
@@ -37,7 +37,7 @@ class StorefrontPolicy
      */
     public function update(User $user, Storefront $storefront): bool
     {
-        return false;
+        return $user->id === $storefront->user_id;
     }
 
     /**

@@ -24,7 +24,7 @@
                 <button @click="storefrontStore.setSidebarActive(!storefrontStore.sidebarActive, MenuPages.GLOBAL)" class="btn-secondary">Components</button>
                 <button @click="preview = !preview" class="btn-secondary">Preview</button>
             </div>
-            <StorefrontView :storefront="storefront" :orders="orders" :preview="preview"/>
+            <StorefrontView :storefront="sortedStorefrontComponents" :orders="orders" :preview="preview"/>
         </div>
 
     </div>
@@ -61,9 +61,19 @@ export default {
             storefrontStore: useStorefrontStore(),
         };
     },
+    computed: {
+        backgroundImage() {
+            return this.storefront.background_image?.storage_path || null;
+        },
+        sortedStorefrontComponents() {
+            return {
+                ...this.storefront,
+                components: [...this.storefront.components].sort((a, b) => a.position - b.position),
+            };
+        },
+    },
     mounted() {
         console.log(this.storefront);
-        this.storefront.components.sort((a, b) => a.position - b.position);
         this.storefrontStore.setSidebarActive(false);
     }
 };

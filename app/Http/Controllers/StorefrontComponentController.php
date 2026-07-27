@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StorefrontComponent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class StorefrontComponentController extends Controller
@@ -16,6 +17,9 @@ class StorefrontComponentController extends Controller
             'position' => 'required|integer|min:0',
             'is_visible' => 'required|boolean',
         ]);
+
+        $storefront = $request->user()->storefront;
+        Gate::authorize('create', $storefront);
 
         if (isset($validated['content']['images']) && is_array($validated['content']['images'])) {
             $images = $validated['content']['images'];
@@ -36,40 +40,59 @@ class StorefrontComponentController extends Controller
         }
 
 
-        $component = StorefrontComponent::create($validated);
-        return response()->json($component, 201);
+        $component = $storefront->components()->create($validated);
+        return redirect()->back();
     }
 
     public function update(Request $request, StorefrontComponent $component)
     {
+        $component->load('storefront');
+        Gate::authorize('update', $component);
+
         $validated = $request->validate([
             'content' => 'sometimes|array',
             'position' => 'sometimes|integer|min:0',
             'is_visible' => 'sometimes|boolean',
         ]);
 
-        $images = $validated['content']['images'];
-        $fileIndex = 0;
+        if (isset($validated['content']['images']) && is_array($validated['content']['images'])) {
+            $images = $validated['content']['images'];
+            $fileIndex = 0;
+            $uploadedFiles = $request->file('files', [] );
 
-        foreach ($images as $i => &$image) {
-            if (!isset($image['ref'])) {
-                // Cette image n'a pas encore de ref = c'est une nouvelle image à uploader
-                $uploadedFile = $request->file('files')[$fileIndex] ?? null;
-                if ($uploadedFile) {
-                    $path = $uploadedFile->store('storefront-images', 'public');
-                    $image['ref'] = '/storage/' . $path;
+            foreach ($images as &$image) {
+                if (empty($image['ref']) && isset($uploadedFiles[$fileIndex])) {
+                    $path = $uploadedFiles[$fileIndex]->store('storefront-images', 'public');
+                    $image['ref'] = Storage::url($path);
                     $fileIndex++;
+                }
+            }
+            unset($image);
+            $validated['content']['images'] = $images;
+        }
+
+        $component->update($validated);
+
+        return redirect()->back();
+    }
+
+    public function delete(Request $request, StorefrontComponent $component)
+    {
+        $component->load('storefront');
+        Gate::authorize('delete', $component);
+
+        if (isset($component->content['images']) && is_array($component->content['images'])) {
+            foreach ($component->content['images'] as $image) {
+                if (!empty($image['ref'])) {
+                    // On retire le "/storage/" pour avoir le vrai chemin du fichier
+                    $path = str_replace('/storage/', '', $image['ref']);
+                    Storage::disk('public')->delete($path);
                 }
             }
         }
 
-        $component->update([
-            'content' => [
-                'image_nb' => $validated['content']['image_nb'],
-                'images' => $images,
-            ],
-        ]);
-        return redirect()->back();
+        $component->delete();
 
+        return redirect()->back();
     }
 }

@@ -65,9 +65,14 @@ export default {
             const existingId = this.storefrontStore.getData?.id;
 
             if (existingId) {
-                this.form.patch(`/storefront/components/${existingId}`, {
+                // On force un POST, mais on dit à Laravel de le traiter comme un PUT
+                this.form.transform((data) => ({
+                    ...data,
+                    _method: 'PUT',
+                })).post(`/storefront/components/${existingId}`, {
                     onSuccess: () => {
                         console.log('Composant mis à jour avec succès', this.form);
+                        this.storefrontStore.setSidebarActive(false);
                     },
                 });
                 return;
@@ -77,6 +82,7 @@ export default {
                 this.form.post('/storefront/components', {
                     onSuccess: () => {
                         console.log('Composant créé avec succès', this.form);
+                        this.storefrontStore.setSidebarActive(false);
                     },
                 });
             }
@@ -85,7 +91,8 @@ export default {
     mounted() {
         if (this.storefrontStore.getData) {
             this.imageNumber = this.storefrontStore.getData.content.image_nb || 1;
-            this.imagesSelected = this.storefrontStore.getData.content.images || [];
+            const storeImages = this.storefrontStore.getData.content.images || [];
+            this.imagesSelected = storeImages.map(img => ({...img}));
         }
         if(this.storefrontStore.getTotalComponents) {
             this.totalComponents = this.storefrontStore.getTotalComponents;

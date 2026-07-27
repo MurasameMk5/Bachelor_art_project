@@ -10,7 +10,7 @@
         </div>
     </div>
     <div v-else class="component-border h-72 justify-center flex-row flex-1 gap-2 relative">
-        <StorefrontComponentHeader header="Image component" @delete="delete"/>
+        <StorefrontComponentHeader header="Image component" @delete="handleDelete" @position-up="handlePositionUp" @position-down="handlePositionDown"/>
         <div v-for="image in imageComponent.content.images" class="flex flex-1 flex-col min-h-0">
             <img
                 :src="image.ref"
@@ -27,6 +27,7 @@
 import StorefrontComponentHeader from './StorefrontComponentHeader.vue';
 import { MenuPages, useStorefrontStore } from '../stores/storefront';
 import { Icon } from '@iconify/vue';
+import { router } from '@inertiajs/vue3';
 export default {
     props: {
         imageComponent: {
@@ -52,10 +53,17 @@ export default {
             storefrontStore: useStorefrontStore(),
         };
     },
-    method: {
-        delete() {
-            this.storefrontStore.deleteComponent(this.imageComponent);
-        }
+    methods: {
+        handleDelete() {
+            if(confirm('Delete image component?'))
+                router.delete(`/storefront/components/${this.imageComponent.id}`)
+        },
+        handlePositionUp() {
+            router.put(`/storefront/components/${this.imageComponent.id}/position`, { direction: 'up' });
+        },
+        handlePositionDown() {
+            router.put(`/storefront/components/${this.imageComponent.id}/position`, { direction: 'down' });
+        },
     },
     mounted() {
         console.log("preview:", this.preview, "artist:", this.artist);
