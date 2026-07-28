@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col gap-4 overflow-y-auto">
+    <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Title</label>
             <input type="text" class="border border-gray-400 rounded-md w-full"/>

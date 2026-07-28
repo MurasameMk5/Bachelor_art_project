@@ -3,7 +3,7 @@
         <span>Images are positioned and resized to fit in a line. Below is a preview of how they will be positioned based on the number selected. </span>
         <div class="flex flex-row justify-between gap-2">
             <span>Number of images</span>
-            <input type="number" min="1" max="10" v-model="imageNumber"/>
+            <input type="number" min="1" max="10" v-model.number="imageNumber"/>
         </div>
         <div class="flex flex-row gap-2 justify-center" v-auto-animate>
             <div v-for="i in imageNumber" :key="i" class="relative flex flex-col h-50 min-w-5 max-w-full gap-2 items-center bg-secondary-300">
@@ -25,12 +25,17 @@ export default {
     components: {
         Icon,
     },
+    props: {
+        totalComponents: {
+            type: Number,
+            required: true,
+        }
+    },
     data() {
         return {
             storefrontStore: useStorefrontStore(),
             imageNumber: 1,
             imagesSelected: [],
-            totalComponents: 0,
             form: useForm({
                 type: 'image',
                 content: {},
@@ -66,6 +71,7 @@ export default {
 
             if (existingId) {
                 // On force un POST, mais on dit à Laravel de le traiter comme un PUT
+                this.form.position = this.storefrontStore.getData?.position || 0;
                 this.form.transform((data) => ({
                     ...data,
                     _method: 'PUT',
@@ -90,12 +96,9 @@ export default {
     },
     mounted() {
         if (this.storefrontStore.getData) {
-            this.imageNumber = this.storefrontStore.getData.content.image_nb || 1;
+            this.imageNumber = parseInt(this.storefrontStore.getData.content.image_nb) || 1;
             const storeImages = this.storefrontStore.getData.content.images || [];
             this.imagesSelected = storeImages.map(img => ({...img}));
-        }
-        if(this.storefrontStore.getTotalComponents) {
-            this.totalComponents = this.storefrontStore.getTotalComponents;
         }
         console.log("images", this.storefrontStore.getData);
     },

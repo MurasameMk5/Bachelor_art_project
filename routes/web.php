@@ -14,10 +14,15 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [OrderController::class, 'index'])->middleware(['auth:sanctum', 'can:artist']);
 
-Route::get('/storefront',[StorefrontController::class, 'showArtist'])->middleware(['auth:sanctum', 'can:artist']);
-Route::post('/storefront/components', [StorefrontComponentController::class, 'insert'])->middleware(['auth:sanctum']);
-Route::match(['PUT', 'PATCH'], '/storefront/components/{component}', [StorefrontComponentController::class, 'update'])->middleware(['auth:sanctum']);
-Route::delete('/storefront/components/{component}', [StorefrontComponentController::class, 'delete'])->middleware(['auth:sanctum']);
+Route::middleware(['auth:sanctum', 'can:artist'])->group(function () {
+    Route::get('/storefront', [StorefrontController::class, 'showArtist']);
+    Route::post('/storefront/components', [StorefrontComponentController::class, 'insert']);
+    Route::match(['PUT', 'PATCH'], '/storefront/components/{component}', [StorefrontComponentController::class, 'update']);
+    Route::match(['PUT', 'PATCH'], '/storefront/components/{component}/{direction}', [StorefrontComponentController::class, 'updatePosition']);
+    Route::delete('/storefront/components/{component}', [StorefrontComponentController::class, 'delete']);
+
+});
+
 Route::get('/request', function () {
     return Inertia::render('Request');
 })->middleware(['auth:sanctum', 'can:artist']);

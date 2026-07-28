@@ -53,16 +53,6 @@ export default {
         };
     },
     methods: {
-        handleDelete() {
-            if(confirm('Delete image component?'))
-                router.delete(`/storefront/components/${this.imageComponent.id}`)
-        },
-        handlePositionUp() {
-            router.put(`/storefront/components/${this.imageComponent.id}`, { position: '${this.imageComponent.position + 1}' });
-        },
-        handlePositionDown() {
-            router.put(`/storefront/components/${this.imageComponent.id}`, { position: '${this.imageComponent.position - 1}' });
-        },
     },
     mounted() {
         console.log("preview:", this.preview, "artist:", this.artist);

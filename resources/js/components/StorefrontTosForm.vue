@@ -1,3 +1,38 @@
 <template>
-    <textarea class="w-full h-ful border-1 border-gray-400 c p-4"></textarea>
+    <div class="flex flex-col gap-4">
+        <textarea v-model="text" class="w-full h-ful border border-gray-400 c p-4 field-sizing-content"></textarea>
+        <button @click="submit" class="btn-primary">Insert</button>
+    </div>
 </template>
+
+<script>
+import { useForm } from "@inertiajs/vue3";
+export default {
+    props: {
+        totalComponents: {
+            type: Number,
+            required: true,
+        },
+    },
+    data() {
+        return {
+            text: 'Welcome to our platform! Please read these terms and conditions carefully before using our services.',
+            form: useForm({
+                type: 'tos',
+                content: {},
+                is_visible: true,
+                position: 0,
+            })
+        }
+    },
+    methods: {
+        submit() {
+            this.form.content = {
+                text: this.text,
+            };
+            this.form.position = this.totalComponents + 1;
+            this.form.post('/storefront/components');
+        }
+    }
+};
+</script>

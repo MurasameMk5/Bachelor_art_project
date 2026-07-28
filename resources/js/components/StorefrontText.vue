@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import StorefrontComponentHeader from './StorefrontComponentHeader.vue';
 export default {
     props: {
         text: {
@@ -24,12 +23,9 @@ export default {
             required: true
         }
     },
-    components: {
-        StorefrontComponentHeader
-    },
     data() {
         return {
-            typedText: this.text
+            typedText: this.text,
         };
     },
 };

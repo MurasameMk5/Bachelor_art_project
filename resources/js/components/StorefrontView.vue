@@ -1,6 +1,6 @@
 <template>
-    <div class="flex flex-col gap-4 pt-14">
-        <div v-for="(component, index) in storefront.components" :key="index">
+    <div class="flex flex-col gap-4 pt-14" v-auto-animate>
+        <div v-for="(component, index) in storefront.components" :key="component.id">
             <StorefrontComponent :component="component" :storefront="storefront" :orders="orders" :preview="preview"/>
         </div>
     </div>

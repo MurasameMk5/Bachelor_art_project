@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('storefront_components', function (Blueprint $table) {
             $table->id();
             $table->foreignId('storefront_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['commission', 'text', 'image', 'kanban', 'divider']);
+            $table->enum('type', ['commission', 'text', 'image', 'kanban', 'divider', 'tos']);
             $table->integer('position')->default(0);
             $table->json('content');
             $table->boolean('is_visible')->default(true);

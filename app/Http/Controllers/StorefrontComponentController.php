@@ -13,7 +13,7 @@ class StorefrontComponentController extends Controller
     {
         $validated = $request->validate([
             'type' => 'required|string',
-            'content' => 'required|array',
+            'content' => 'nullable|array',
             'position' => 'required|integer|min:0',
             'is_visible' => 'required|boolean',
         ]);
@@ -38,7 +38,6 @@ class StorefrontComponentController extends Controller
             unset($image);
             $validated['content']['images'] = $images;
         }
-
 
         $component = $storefront->components()->create($validated);
         return redirect()->back();
@@ -91,8 +90,36 @@ class StorefrontComponentController extends Controller
             }
         }
 
+        foreach ($component->storefront->components()->where('position', '>', $component->position)->get() as $otherComponent) {
+            $otherComponent->update(['position' => $otherComponent->position - 1]);
+        }
+
         $component->delete();
 
+        return redirect()->back();
+    }
+
+    public function updatePosition(Request $request, StorefrontComponent $component, string $direction)
+    {
+        $component->load('storefront');
+        Gate::authorize('update', $component);
+        if($direction === 'up'){
+            $otherComponent = $component->storefront->components()->where('position', $component->position - 1)->first();
+
+            if ($otherComponent) {
+                $component->update(['position' => $component->position - 1]);
+                $otherComponent->update(['position' => $otherComponent->position + 1]);
+            }
+        }
+        else if($direction === 'down')
+        {
+            $otherComponent = $component->storefront->components()->where('position', $component->position + 1)->first();
+
+            if ($otherComponent) {
+                $component->update(['position' => $component->position + 1]);
+                $otherComponent->update(['position' => $otherComponent->position - 1]);
+            }
+        }
         return redirect()->back();
     }
 }
