@@ -1,6 +1,6 @@
 <template>
     <div v-if="preview || $page.props.auth.user.id !== artist" class="flex h-72 w-full max-w-full flex-row justify-center gap-2">
-        <div v-for="image in imageComponent.images" class="flex flex-1 flex-col">
+        <div v-for="image in imageComponent.content.images" class="flex flex-1 flex-col">
             <img
                 :src="image.ref"
                 :alt="image.label"
@@ -9,8 +9,7 @@
             <span class="mt-1 text-center text-sm leading-tight">{{ image.label }}</span>
         </div>
     </div>
-    <div v-else class="component-border h-72 justify-center flex-row flex-1 gap-2 relative">
-        <StorefrontComponentHeader header="Image component" @delete="handleDelete" @position-up="handlePositionUp" @position-down="handlePositionDown"/>
+    <div v-else class=" flex h-72 w-full max-w-full flex-row justify-center gap-2">
         <div v-for="image in imageComponent.content.images" class="flex flex-1 flex-col min-h-0">
             <img
                 :src="image.ref"
@@ -59,10 +58,10 @@ export default {
                 router.delete(`/storefront/components/${this.imageComponent.id}`)
         },
         handlePositionUp() {
-            router.put(`/storefront/components/${this.imageComponent.id}/position`, { direction: 'up' });
+            router.put(`/storefront/components/${this.imageComponent.id}`, { position: '${this.imageComponent.position + 1}' });
         },
         handlePositionDown() {
-            router.put(`/storefront/components/${this.imageComponent.id}/position`, { direction: 'down' });
+            router.put(`/storefront/components/${this.imageComponent.id}`, { position: '${this.imageComponent.position - 1}' });
         },
     },
     mounted() {

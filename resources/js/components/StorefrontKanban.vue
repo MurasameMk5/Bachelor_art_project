@@ -25,8 +25,7 @@
             </div>
         </div>
     </div>
-    <div v-else class="component-border">
-        <StorefrontComponentHeader header="Kanban component" />
+    <div v-else>
         <div class="flex flex-row-3 gap-2 border-t-4 border-secondary-300 rounded-xl shadow-lg p-2 bg-white">
             <div class="flex flex-col gap-4 w-full">
                 <span class="text-lg">To do</span>

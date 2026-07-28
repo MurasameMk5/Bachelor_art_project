@@ -2,8 +2,7 @@
     <div v-if="preview || $page.props.auth.user.id !== artist" class="flex justify-center">
         <span> {{ text }} </span>
     </div>
-    <div v-else class="component-border">
-        <StorefrontComponentHeader header="Text component" />
+    <div v-else>
         <textarea class="bg-slate-50 border-slate-200 border rounded-md w-full p-2 field-sizing-content" v-model="typedText"></textarea>
     </div>
 </template>

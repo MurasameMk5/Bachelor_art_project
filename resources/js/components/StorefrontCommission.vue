@@ -7,8 +7,7 @@
         <span class="absolute bottom-0 right-30 bg-secondary text-white mb-4 mr-4 px-4 py-2 rounded-full"> {{ commission.estimated_days }} days</span>
         <span class="absolute bottom-0 right-0 bg-secondary text-white mb-4 mr-4 px-4 py-2 rounded-full">{{ commission.base_price }} {{ commission.currency }}</span>
     </Link>
-    <div v-else class="component-border">
-        <StorefrontComponentHeader header="Commission component" />
+    <div v-else>
         <img v-for="image in commission.images" :src="image?.storage_path" class="w-full h-100 object-contain"/>
 
         <span class="absolute top-0 left-0 bg-secondary text-white mt-4 ml-4 px-4 py-2 rounded-full">{{ commission.title }}</span>

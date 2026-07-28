@@ -2,8 +2,7 @@
     <div v-if="preview || $page.props.auth.user.id !== artist">
         <div class="h-1 w-full bg-gray-300 rounded-full"></div>
     </div>
-    <div v-else class="component-border">
-        <StorefrontComponentHeader header="Divider component" />
+    <div v-else>
         <div class="h-1 w-full bg-gray-300 rounded-full"></div>
 
     </div>
