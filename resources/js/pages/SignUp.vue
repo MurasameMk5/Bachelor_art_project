@@ -2,19 +2,19 @@
   <div class="flex flex-col gap-4 items-center justify-center h-screen">
     <h1>Sign Up</h1>
     <form @submit.prevent="submit" class="flex flex-col gap-4 w-1/3">
-      <input v-model="form.name" type="text" placeholder="Name" />
-      <input v-model="form.email" type="email" placeholder="Email" />
+      <input v-model="form.name" type="text" class="border border-gray-500 rounded p-2" placeholder="Name" />
+      <input v-model="form.email" type="email" class="border border-gray-500 rounded p-2" placeholder="Email" />
       <span v-if="form.errors.email" class="text-red-500">{{ form.errors.email }}</span>
-      <input v-model="form.password" type="password" placeholder="Password" />
+      <input v-model="form.password" type="password" class="border border-gray-500 rounded p-2" placeholder="Password" />
       <span v-if="form.errors.password" class="text-red-500">{{ form.errors.password }}</span>
-      <input v-model="form.password_confirmation" type="password" placeholder="Confirm Password" />
+      <input v-model="form.password_confirmation" type="password" class="border border-gray-500 rounded p-2" placeholder="Confirm Password" />
       <div class="flex items-center gap-2">
         <input v-model="form.role" type="checkbox" />
         <label for="role">Are you an artist?</label>
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit" class="btn-primary-filled">Sign Up</button>
     </form>
-    <span>Already have an account? <Link href="/login">Sign in</Link></span>
+    <span>Already have an account? <Link href="/login" class="text-secondary font-bold">Sign in</Link></span>
   </div>
 </template>
 

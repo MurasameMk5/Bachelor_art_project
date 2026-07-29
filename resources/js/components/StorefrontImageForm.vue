@@ -72,10 +72,7 @@ export default {
             if (existingId) {
                 // On force un POST, mais on dit à Laravel de le traiter comme un PUT
                 this.form.position = this.storefrontStore.getData?.position || 0;
-                this.form.transform((data) => ({
-                    ...data,
-                    _method: 'PUT',
-                })).post(`/storefront/components/${existingId}`, {
+                this.form.put(`/storefront/components/${existingId}`, {
                     onSuccess: () => {
                         console.log('Composant mis à jour avec succès', this.form);
                         this.storefrontStore.setSidebarActive(false);

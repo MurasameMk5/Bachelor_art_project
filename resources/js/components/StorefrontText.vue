@@ -1,17 +1,18 @@
 <template>
     <div v-if="preview || $page.props.auth.user.id !== artist" class="flex justify-center">
-        <span> {{ text }} </span>
+        <span> {{ component.content.text }} </span>
     </div>
     <div v-else>
-        <textarea class="bg-slate-50 border-slate-200 border rounded-md w-full p-2 field-sizing-content" v-model="typedText"></textarea>
+        <textarea @pointerleave="submit" class="bg-slate-50 border-slate-200 border rounded-md w-full p-2 field-sizing-content" v-model="typedText"></textarea>
     </div>
 </template>
 
 <script>
+import { useForm } from '@inertiajs/vue3';
 export default {
     props: {
-        text: {
-            type: String,
+        component: {
+            type: Object,
             required: true
         },
         preview: {
@@ -25,8 +26,19 @@ export default {
     },
     data() {
         return {
-            typedText: this.text,
+            typedText: this.component.content.text,
+            form: useForm({
+                content: {},
+            })
         };
     },
+    methods: {
+        submit() {
+            if (this.typedText !== this.component.content.text && this.component.id) {
+                this.form.content = { text: this.typedText };
+                this.form.put(`/storefront/components/${this.component.id}`);
+            }
+        }
+    }
 };
 </script>
