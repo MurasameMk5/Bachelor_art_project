@@ -1,16 +1,31 @@
 <template>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 p-2">
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Title</label>
             <input type="text" class="border border-gray-400 rounded-md w-full"/>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 flex-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Price</label>
-            <input type="text" class="border border-gray-400 rounded-md w-full"/>
+            <div class="flex flex-row gap-2">
+                <input type="text" class="border border-gray-400 rounded-md w-full"/>
+                <select class="border border-gray-400 rounded-md flex-1">
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">CHF</option>
+                </select>
+            </div>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Time</label>
             <input type="text" class="border border-gray-400 rounded-md w-full"/>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Number of free revisions max</label>
+            <input type="number" class="border border-gray-400 rounded-md w-full"/>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Available slots</label>
+            <input type="number" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Description</label>
@@ -65,6 +80,7 @@
 
 <script>
 import {Icon} from '@iconify/vue';
+import {useForm} from '@inertiajs/vue3';
 
 export default {
     components: {
@@ -73,7 +89,17 @@ export default {
     data() {
         return {
             imagesSelected: [],
-            questions:[]
+            questions:[],
+            form: useForm({
+                title: '',
+                price: '',
+                time: '',
+                free_revisions: 0,
+                available_slots: 0,
+                description: '',
+                images: [],
+                questions: [],
+            })
         }
     },
     methods: {
