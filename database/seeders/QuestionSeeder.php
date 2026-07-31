@@ -20,23 +20,38 @@ class QuestionSeeder extends Seeder
             return;
         }
 
+        // On structure 'text' comme un tableau avec au minimum un 'label'
+        // Et des 'options' si c'est un type 'select' ou 'radio'
         $questions = [
-            ['text' => 'Décrivez le personnage souhaité', 'field_type' => 'textarea'],
-            ['text' => 'Nom du personnage', 'field_type' => 'text'],
-            ['text' => 'Nombre de personnages', 'field_type' => 'number'],
-            ['text' => 'Style souhaité', 'field_type' => 'select'],
-            ['text' => 'Usage commercial ?', 'field_type' => 'checkbox'],
-            ['text' => 'Référence visuelle (fichier)', 'field_type' => 'file'],
-            ['text' => 'Palette de couleurs préférée', 'field_type' => 'text'],
-            ['text' => 'Contexte / univers de la scène', 'field_type' => 'textarea'],
-            ['text' => 'Budget maximum', 'field_type' => 'number'],
-            ['text' => 'Délai souhaité', 'field_type' => 'text'],
+            ['text' => ['label' => 'Décrivez le personnage souhaité'], 'field_type' => 'text'],
+            ['text' => ['label' => 'Nom du personnage'], 'field_type' => 'text'],
+            ['text' => ['label' => 'Nombre de personnages'], 'field_type' => 'number'],
+            [
+                'text' => [
+                    'label' => 'Style souhaité', 
+                    'options' => ['Anime', 'Réaliste', 'Cartoon', 'Pixel Art'] // <-- Options ajoutées ici
+                ], 
+                'field_type' => 'select'
+            ],
+            ['text' => ['label' => 'Usage commercial ?'], 'field_type' => 'checkbox'],
+            ['text' => ['label' => 'Référence visuelle (fichier)'], 'field_type' => 'file'],
+            ['text' => ['label' => 'Palette de couleurs préférée'], 'field_type' => 'text'],
+            ['text' => ['label' => 'Contexte / univers de la scène'], 'field_type' => 'text'],
+            ['text' => ['label' => 'Budget maximum'], 'field_type' => 'number'],
+            [
+                'text' => [
+                    'label' => 'Délai souhaité',
+                    'options' => ['Pas d\'urgence', 'Moins d\'un mois', 'Moins d\'une semaine']
+                ], 
+                'field_type' => 'select' // J'ai transformé celui-ci en select pour l'exemple
+            ],
         ];
 
         foreach ($questions as $i => $question) {
             DB::table('questions')->insert([
                 'commission_id' => $commissionIds[$i % $commissionIds->count()],
-                'text' => $question['text'],
+                // On utilise json_encode car DB::table bypass les casts du Modèle
+                'text' => json_encode($question['text'], JSON_UNESCAPED_UNICODE),
                 'field_type' => $question['field_type'],
                 'created_at' => now(),
                 'updated_at' => now(),

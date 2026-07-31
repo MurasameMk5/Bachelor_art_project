@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('commission_id')->constrained()->cascadeOnDelete();
-            $table->string('text');
-            $table->enum('field_type', ['text', 'textarea', 'number', 'select', 'checkbox', 'file']);
+            $table->json('text');
+            $table->enum('field_type', ['text', 'number', 'select', 'checkbox', 'file']);
             $table->timestamps();
         });
     }

@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(["id", "commission_id", "text", "field_type"])]
 class Question extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'text' => 'array',
+        ];
+    }
     public function commission()
     {
         return $this->belongsTo(Commission::class);

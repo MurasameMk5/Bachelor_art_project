@@ -12,14 +12,14 @@ class StorefrontController extends Controller
     public function showArtist(Request $request)
     {
         return inertia('StorefrontArtist', [
-            'storefront' => $request->user()->storefront->load('components.commission.images'),
+            'storefront' => $request->user()->storefront->load(['components.commission.images', 'components.commission.questions']),
             'orders' => $request->user()->ordersAsArtist()->with('commission', 'client')->get(),
         ]);
     }
     public function showClient(Request $request, Storefront $storefront)
     {
         return inertia('StorefrontClient', [
-            'storefront' => $storefront->load('components.commission.images'),
+            'storefront' => $storefront->load(['components.commission.images', 'components.commission.questions']),
             'orders' => $storefront->user->ordersAsArtist()->with('commission', 'client')->get(),
         ]);
     }

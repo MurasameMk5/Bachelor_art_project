@@ -31,6 +31,7 @@ export default {
                 text: this.text,
             };
             this.form.position = this.totalComponents + 1;
+            console.log("form", this.form);
             this.form.post('/storefront/components');
         }
     }

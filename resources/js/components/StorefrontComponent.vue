@@ -6,7 +6,7 @@
         <StorefrontKanban v-if="component.type === 'kanban'" :orders="orders" :artist="storefront.user_id" :preview="preview"/>
         <StorefrontImage v-if="component.type === 'image'" :imageComponent="component" :artist="storefront.user_id" :preview="preview"/>
         <StorefrontText v-if="component.type === 'text'" :component="component" :artist="storefront.user_id" :preview="preview" />
-        <StorefrontTos v-if="component.type === 'tos'" :text="component.content.text" :artist="storefront.user_id" :preview="preview" />
+        <StorefrontTos v-if="component.type === 'tos'" :component="component" :artist="storefront.user_id" :preview="preview" />
     </div>
 
 </template>

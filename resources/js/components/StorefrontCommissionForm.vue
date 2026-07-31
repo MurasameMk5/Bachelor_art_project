@@ -2,13 +2,13 @@
     <div class="flex flex-col gap-4 p-2">
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Title</label>
-            <input type="text" class="border border-gray-400 rounded-md w-full"/>
+            <input v-model="form.title" type="text" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2 flex-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Price</label>
             <div class="flex flex-row gap-2">
-                <input type="text" class="border border-gray-400 rounded-md w-full"/>
-                <select class="border border-gray-400 rounded-md flex-1">
+                <input v-model="form.base_price" type="text" class="border border-gray-400 rounded-md w-full"/>
+                <select v-model="form.currency" class="border border-gray-400 rounded-md flex-1">
                     <option value="usd">USD</option>
                     <option value="eur">EUR</option>
                     <option value="gbp">CHF</option>
@@ -16,20 +16,20 @@
             </div>
         </div>
         <div class="flex flex-col gap-2">
-            <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Time</label>
-            <input type="text" class="border border-gray-400 rounded-md w-full"/>
+            <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Estimated Days</label>
+            <input v-model="form.estimated_days" type="text" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Number of free revisions max</label>
-            <input type="number" class="border border-gray-400 rounded-md w-full"/>
+            <input v-model="form.free_revisions" type="number" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Available slots</label>
-            <input type="number" class="border border-gray-400 rounded-md w-full"/>
+            <input v-model="form.available_slots" type="number" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea class="border border-gray-400 rounded-md w-full"/>
+            <textarea v-model="form.description" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <span>Reference Images</span>
         <div class="relative flex flex-col h-50 min-w-5 max-w-full gap-2 items-center border-2 border-secondary rounded-md">
@@ -81,6 +81,7 @@
 <script>
 import {Icon} from '@iconify/vue';
 import {useForm} from '@inertiajs/vue3';
+import {useStorefrontStore} from '../stores/storefront';
 
 export default {
     components: {
@@ -90,10 +91,12 @@ export default {
         return {
             imagesSelected: [],
             questions:[],
+            storefrontStore: useStorefrontStore(),
             form: useForm({
                 title: '',
-                price: '',
-                time: '',
+                base_price: '',
+                currency: 'usd',
+                estimated_days: '',
                 free_revisions: 0,
                 available_slots: 0,
                 description: '',
@@ -120,6 +123,20 @@ export default {
         },
     },
     mounted() {
+    if (this.storefrontStore.getData) {
+        const data = this.storefrontStore.getData;
+
+        this.form.title = data.title ?? '';
+        this.form.base_price = data.base_price ?? '';
+        this.form.estimated_days = data.estimated_days ?? '';
+        this.form.free_revisions = data.free_revisions ?? 0;
+        this.form.available_slots = data.available_slots ?? 0;
+        this.form.description = data.description ?? '';
+        this.form.currency = data.currency ?? 'usd';
+
+        this.imagesSelected = (data.images || []).map(image => ({ ref: image.ref, label: image.label }));
+        this.questions = data.questions || [];
     }
+}
 }
 </script>
