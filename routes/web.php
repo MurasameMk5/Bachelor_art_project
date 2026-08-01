@@ -23,6 +23,12 @@ Route::middleware(['auth:sanctum', 'can:artist'])->group(function () {
 
 });
 
+// routes/web.php
+Route::middleware(['auth:sanctum', 'can:artist'])->group(function () {
+    Route::post('/commissions', [CommissionController::class, 'store']);
+    Route::patch('/commissions/{commission}', [CommissionController::class, 'update']);
+});
+
 Route::get('/request', function () {
     return Inertia::render('Request');
 })->middleware(['auth:sanctum', 'can:artist']);

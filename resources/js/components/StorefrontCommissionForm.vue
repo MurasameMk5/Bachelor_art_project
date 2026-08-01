@@ -11,7 +11,7 @@
                 <select v-model="form.currency" class="border border-gray-400 rounded-md flex-1">
                     <option value="usd">USD</option>
                     <option value="eur">EUR</option>
-                    <option value="gbp">CHF</option>
+                    <option value="chf">CHF</option>
                 </select>
             </div>
         </div>
@@ -21,11 +21,11 @@
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Number of free revisions max</label>
-            <input v-model="form.free_revisions" type="number" class="border border-gray-400 rounded-md w-full"/>
+            <input v-model="form.max_free_revisions" type="number" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Available slots</label>
-            <input v-model="form.available_slots" type="number" class="border border-gray-400 rounded-md w-full"/>
+            <input v-model="form.slots_available" type="number" class="border border-gray-400 rounded-md w-full"/>
         </div>
         <div class="flex flex-col gap-2">
             <label for="backgroundImage" class="block text-sm font-medium text-gray-700">Description</label>
@@ -42,7 +42,7 @@
         <div v-if="imagesSelected.length > 0" class="flex flex-row gap-4 overflow-x-auto    ">
             <div v-for="(image, i) in imagesSelected" @click="removeFile(i)" :key="i" class="relative flex-shrink-0">
                 <Icon icon="lucide:delete" class="absolute top-0 right-0 text-danger" />
-                <img :src="image" alt="Preview" class="h-20"/>
+                <img :src="image.ref" :alt="image.label" class="h-20"/>
             </div>
         </div>
         <div class="flex flex-row justify-between gap-2">
@@ -56,12 +56,13 @@
                     <Icon @click="questions.splice(index, 1)" class="btn-danger hover:text-red-500 transition-color" icon="lucide:trash-2"/>
                 </div>
                 <input v-model="question.label" type="text" class="border border-gray-400 rounded-md w-full"/>
-                <select v-model="question.type" class="border border-gray-400 rounded-md w-full">
+                <select v-model="question.field_type" class="border border-gray-400 rounded-md w-full">
                     <option value="text">Text</option>
-                    <option value="radio">Radio Button</option>
+                    <option value="checkbox">Checkbox</option>
                     <option value="file">File</option>
+                    <option value="number">Number</option>
                 </select>
-                <div v-if="question.type === 'radio'" v-auto-animate class="flex flex-col gap-2 justify-center ">
+                <div v-if="question.field_type === 'checkbox'" v-auto-animate class="flex flex-col gap-2 justify-center ">
                     <span>Options</span>
                     <div class="flex flex-col gap-2">
                         <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row items-center gap-2">
@@ -74,7 +75,7 @@
             </div>
         </div>
 
-        <button class="btn-primary">Insert</button>
+        <button @click="submit" class="btn-primary">Insert</button>
     </div>
 </template>
 
@@ -97,8 +98,8 @@ export default {
                 base_price: '',
                 currency: 'usd',
                 estimated_days: '',
-                free_revisions: 0,
-                available_slots: 0,
+                max_free_revisions: 0,
+                slots_available: 0,
                 description: '',
                 images: [],
                 questions: [],
@@ -111,7 +112,11 @@ export default {
             if (files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
-                    this.imagesSelected.push(URL.createObjectURL(file));
+                    this.imagesSelected.push({
+                        ref: URL.createObjectURL(file),
+                        label: file.name,
+                        file: file,
+                    });
                 }
             }
         },
@@ -119,24 +124,55 @@ export default {
             this.imagesSelected.splice(index, 1);
         },
         addQuestion(){
-            this.questions.push({ label: "", type: "text", options: []});
+            this.questions.push({ text: "", field_type: "text", options: [] });
         },
+        submit() {
+            this.form.images = this.imagesSelected.map(img => ({
+                id: img.id ?? null,
+                ref: img.file ? null : img.ref,
+                label: img.label,
+            }));
+            this.form.questions = this.questions.map(q => ({
+                label: q.label,
+                field_type: q.field_type,
+                options: q.options,
+            }));
+            this.form.files = this.imagesSelected.filter(img => img.file).map(img => img.file);
+
+            const existingId = this.storefrontStore.getData?.id;
+
+            if (existingId) {
+                this.form.patch(`/commissions/${existingId}`);
+            } else {
+                console.log("Submitting new commission with data:", this.form);
+                this.form.post('/commissions');
+            }
+        }
     },
     mounted() {
-    if (this.storefrontStore.getData) {
-        const data = this.storefrontStore.getData;
+        if (this.storefrontStore.getData) {
+            const data = this.storefrontStore.getData;
 
-        this.form.title = data.title ?? '';
-        this.form.base_price = data.base_price ?? '';
-        this.form.estimated_days = data.estimated_days ?? '';
-        this.form.free_revisions = data.free_revisions ?? 0;
-        this.form.available_slots = data.available_slots ?? 0;
-        this.form.description = data.description ?? '';
-        this.form.currency = data.currency ?? 'usd';
+            this.form.title = data.title ?? '';
+            this.form.base_price = data.base_price ?? '';
+            this.form.estimated_days = data.estimated_days ?? '';
+            this.form.max_free_revisions = parseInt(data.max_free_revisions) || 0;
+            this.form.slots_available = parseInt(data.slots_available) || 0;
+            this.form.description = data.description ?? '';
+            this.form.currency = data.currency ?? 'usd';
 
-        this.imagesSelected = (data.images || []).map(image => ({ ref: image.ref, label: image.label }));
-        this.questions = data.questions || [];
+            this.imagesSelected = (data.images || []).map(image => ({
+                id: image.id,
+                ref: image.storage_path,
+                label: image.caption,
+            }));
+
+            this.questions = (data.questions || []).map(question => ({
+                label: question.text?.label ?? '',
+                field_type: question.field_type ?? 'text',
+                options: question.text?.options ?? [],
+            }));
+        }
     }
-}
 }
 </script>
