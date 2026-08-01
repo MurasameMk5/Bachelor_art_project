@@ -1,5 +1,5 @@
 <template>
-    <Link v-if="preview || $page.props.auth.user.id !== artist" :href="`/${storefrontSlug}/${commission.id}`" class="w-full flex flex-row rounded-t-xl rounded-x-xl relative cursor-pointer">
+    <Link v-if="preview || $page.props.auth.user.id !== artist" :href="`/${storefrontSlug}/${commission.id}`" class="w-full flex flex-row rounded-t-xl rounded-x-xl overflow-hidden relative cursor-pointer">
         <div class="bg-slate-600/20 transition-all hover:opacity-0 w-full h-full absolute top-0 left-0 rounded-t-xl rounded-x-xl"></div>
         <img v-for="image in commission.images" :src="image?.storage_path" class="w-full h-100 object-cover"/>
 
@@ -7,7 +7,7 @@
         <span class="absolute bottom-0 right-30 bg-secondary text-white mb-4 mr-4 px-4 py-2 rounded-full"> {{ commission.estimated_days }} days</span>
         <span class="absolute bottom-0 right-0 bg-secondary text-white mb-4 mr-4 px-4 py-2 rounded-full">{{ commission.base_price }} {{ commission.currency }}</span>
     </Link>
-    <div v-else>
+    <div v-else class="flex flex-row">
         <img v-for="image in commission.images" :src="image?.storage_path" class="w-full h-100 object-contain"/>
 
         <span class="absolute top-0 left-0 bg-secondary text-white mt-4 ml-4 px-4 py-2 rounded-full">{{ commission.title }}</span>

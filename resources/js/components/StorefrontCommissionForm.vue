@@ -103,6 +103,7 @@ export default {
                 description: '',
                 images: [],
                 questions: [],
+                files: [],
             })
         }
     },

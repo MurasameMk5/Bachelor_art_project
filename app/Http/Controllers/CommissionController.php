@@ -95,6 +95,7 @@ class CommissionController extends Controller
             'slots_available' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'images' => 'sometimes|array',
+            'images.*.id' => 'nullable|integer',
             'images.*.ref' => 'nullable|string',
             'images.*.label' => 'nullable|string',
             'questions' => 'sometimes|array',
@@ -106,19 +107,25 @@ class CommissionController extends Controller
 
     private function syncImages(Commission $commission, array $images, Request $request): void
     {
+        // 1. On sécurise la récupération des fichiers (pour s'assurer d'avoir un tableau propre)
         $uploadedFiles = $request->file('files', []);
+        if (!is_array($uploadedFiles)) {
+            $uploadedFiles = $uploadedFiles ? [$uploadedFiles] : [];
+        }
+        $uploadedFiles = array_values(array_filter($uploadedFiles));
+
         $fileIndex = 0;
         $keptImageIds = [];
 
         foreach ($images as $image) {
-            if (!empty($image['ref'])) {
-                // Image déjà existante, gardée telle quelle
-                $keptImageIds[] = $image['id'] ?? null;
+            // 2. On vérifie la présence de l'ID, pas de la ref !
+            if (!empty($image['id'])) {
+                $keptImageIds[] = $image['id'];
                 continue;
             }
 
-            // Nouvelle image à uploader
-            if (isset($uploadedFiles[$fileIndex])) {
+            // 3. C'est une nouvelle image sans ID, on l'upload
+            if (isset($uploadedFiles[$fileIndex]) && $uploadedFiles[$fileIndex]->isValid()) {
                 $path = $uploadedFiles[$fileIndex]->store('commission-images', 'public');
                 $newImage = $commission->images()->create([
                     'storage_path' => Storage::url($path),
@@ -129,13 +136,15 @@ class CommissionController extends Controller
             }
         }
 
-        // Supprime les images retirées par l'utilisateur (plus dans la liste finale)
+        // 4. On supprime les images qui ne sont plus dans la liste
         $commission->images()
             ->whereNotIn('id', array_filter($keptImageIds))
             ->get()
             ->each(function (CommissionImage $img) {
-                $path = str_replace('/storage/', '', $img->storage_path);
-                Storage::disk('public')->delete($path);
+                if ($img->storage_path) {
+                    $path = str_replace('/storage/', '', $img->storage_path);
+                    Storage::disk('public')->delete($path);
+                }
                 $img->delete();
             });
     }
