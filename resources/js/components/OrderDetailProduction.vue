@@ -54,7 +54,7 @@ export default {
     data() {
         return {
             imagesSelected: [],
-            selectedStage: null,
+            selectedStage: "",
             stageSelected: [],
         }
     },

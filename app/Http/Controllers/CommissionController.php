@@ -15,7 +15,7 @@ class CommissionController extends Controller
 {
     public function show(Request $request, string $storefrontSlug, Commission $commission)
     {
-        return Inertia::render('OrderForm', [
+        return Inertia::render('CommissionDetail', [
             'commission' => $commission->load(['artist', 'images', 'questions']),
             'user' => $request->user(),
         ]);
