@@ -18,10 +18,11 @@
 
         </div>
 
+        <!-- Client answers view -->
         <div class="flex flex-col gap-4 p-2" v-if="!brief_view">
             <div class="flex flex-col gap-2">
                 <label for="client" class="block ml-2">Client</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="order.client.name"/>
+                <input type="text" class="bg-slate-50 border-slate-200 border rounded-md w-full p-3 h-10" :placeholder="order.client.name"/>
             </div>
             <div v-for="answer in order.answers" :key="answer.id" class="flex flex-col gap-2">
                 <label :for="`question${answer.question_id}`" class="block ml-2"> {{ answer.question?.text.label }}</label>
@@ -29,10 +30,9 @@
             </div>
         </div>
 
+        <!-- Brief edition view -->
         <div v-else class="border border-slate-200 rounded-lg bg-white">
-            <!-- Toolbar -->
             <div class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
-
                 <button type="button" class="toolbar-btn" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
                     <Icon icon="lucide:text-align-start" class="w-4 h-4" />
                 </button>
@@ -120,7 +120,6 @@
                 </button>
             </div>
 
-            <!-- Zone d'édition -->
             <div class="a4-page-wrapper">
                 <editor-content
                     :editor="editor"
@@ -136,6 +135,25 @@
                 <span>Send brief</span>
             </button>
         </div>
+    </div>
+
+    <!-- Template for the brief -->
+    <div ref="briefTemplate" style="display: none;">
+        <h2>Art commission brief</h2>
+        <hr>
+        <h3>Commission type</h3>
+        <p><strong>{{ order.commission.title }}</strong></p>
+        <p>{{ order.commission.description }}</p>
+        <p><strong>Client name :</strong> {{ order.client.name }}</p>
+        <p><strong>Client email adress :</strong> {{ order.client.email }}</p>
+        <hr>
+        <h3>Commission request</h3>
+            <div v-for="answer in order.answers" :key="answer.id">
+                <strong>{{ answer.question?.text.label }}</strong>
+                <p>
+                    {{ answer.value.text }}
+                </p>
+            </div>
     </div>
 </template>
 
@@ -167,18 +185,20 @@ export default {
         };
     },
     mounted() {
-        this.editor = markRaw(new Editor({
-            extensions: [
-                StarterKit,
-                TextAlign.configure({
-                    types: ['heading', 'paragraph'],
-                }),
-            ],
-          content: '{{this.brief_view}}',
-          onTransaction: () => {
-              this.$forceUpdate();
-          },
-        }));
+        this.$nextTick(() => {
+            const briefHTML = this.$refs.briefTemplate.innerHTML;
+
+            this.editor = markRaw(new Editor({
+                extensions: [
+                    StarterKit,
+                    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+                ],
+                content: briefHTML,
+                onTransaction: () => {
+                    this.$forceUpdate();
+                },
+            }));
+        });
     },
     beforeUnmount() {
         if (this.editor) {
