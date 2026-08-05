@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed inset-0 bg-black/10 grid place-items-center z-50" @click.stop="$emit('close')">
-        <div class="p-4 bg-white rounded-md border-2 border-secondary max-h-full m-10">
+    <div class="fixed inset-0 bg-black/10 grid place-items-center z-50" @click="$emit('close')">
+        <div @click.stop class="p-4 bg-white rounded-md border-2 border-secondary max-h-full m-10">
             <h3 class="text-lg font-bold">Request Commission</h3>
             <p>Please fill out the form below to request this commission.</p>
             <div class="mt-4 overflow-y-auto">
@@ -59,6 +59,7 @@ export default {
                     this.modalVisible = true;
                     setTimeout(() => {
                         this.modalVisible = false;
+                        this.$emit('close');
                     }, 2000);
                 },
             });

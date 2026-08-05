@@ -25,7 +25,7 @@
             </div>
             <div v-for="answer in order.answers" :key="answer.id" class="flex flex-col gap-2">
                 <label :for="`question${answer.question_id}`" class="block ml-2"> {{ answer.question?.text.label }}</label>
-                <input type="text" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="answer.value.text"/>
+                <input type="text" readonly="readonly" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="answer.value.text"/>
             </div>
         </div>
 
@@ -174,7 +174,7 @@ export default {
                     types: ['heading', 'paragraph'],
                 }),
             ],
-          content: '<p>Hello World! 🌎️</p>',
+          content: '{{this.brief_view}}',
           onTransaction: () => {
               this.$forceUpdate();
           },

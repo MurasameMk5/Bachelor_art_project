@@ -16,7 +16,7 @@
             </button>
         </div>
     </div>
-    <CommissionDetailOrderForm v-if="orderForm" :commission="commission" :close="orderForm=false"/>
+    <CommissionDetailOrderForm v-if="orderForm" :commission="commission" @close="orderForm=false"/>
 </template>
 
 <script>

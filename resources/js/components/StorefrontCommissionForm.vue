@@ -58,11 +58,10 @@
                 <input v-model="question.label" type="text" class="border border-gray-400 rounded-md w-full"/>
                 <select v-model="question.field_type" class="border border-gray-400 rounded-md w-full">
                     <option value="text">Text</option>
-                    <option value="checkbox">Checkbox</option>
+                    <option value="select">Selection</option>
                     <option value="file">File</option>
-                    <option value="number">Number</option>
                 </select>
-                <div v-if="question.field_type === 'checkbox'" v-auto-animate class="flex flex-col gap-2 justify-center ">
+                <div v-if="question.field_type === 'select'" v-auto-animate class="flex flex-col gap-2 justify-center ">
                     <span>Options</span>
                     <div class="flex flex-col gap-2">
                         <div v-for="(option, optionIndex) in question.options" :key="optionIndex" class="flex flex-row items-center gap-2">
