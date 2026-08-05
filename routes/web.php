@@ -33,7 +33,11 @@ Route::get('/request', function () {
     return Inertia::render('Request');
 })->middleware(['auth:sanctum', 'can:artist']);
 
-Route::get('/order/{order}', [OrderController::class, 'show'])->middleware('auth:sanctum');
+// routes/web.php
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/order/{order}', [OrderController::class, 'show'])->name('order.show');
+});
 
 Route::get('/{storefront:slug}', [StorefrontController::class, 'showClient']);
 Route::get('/{storefrontSlug}/{commission}', [CommissionController::class, 'show'])->middleware('auth:sanctum');

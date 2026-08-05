@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('status', ['to do', 'doing', 'done', 'cancelled',])->default('to do');
             $table->enum('production_stage', ['brief', 'production', 'revision', 'awaiting_payment',])->nullable();
             $table->boolean('awaiting_confirmation')->default(false);
-            $table->string('invoice_number')->unique();
+            $table->string('invoice_number')->nullable()->unique();
             $table->timestamp('invoice_generated_at')->nullable();
             $table->timestamps();
         });
