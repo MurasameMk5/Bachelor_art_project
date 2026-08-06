@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex h-full min-h-0 w-full flex-row items-stretch overflow-hidden">
+    <div class="relative flex h-full min-h-0 flex-row items-stretch overflow-hidden">
         <img v-if="backgroundImage" :src="backgroundImage" class="absolute top-0 left-0 w-full h-full -z-10"/>
 
         <Transition
@@ -19,7 +19,7 @@
         </Transition>
 
 
-        <div class="h-full min-h-0 p-4 w-full max-w-7xl mx-auto flex-1 overflow-auto">
+        <div class="h-full min-h-0 p-4 max-w-4/5 mx-auto flex-1 overflow-auto">
             <div class=" flex gap-4 justify-end absolute z-10 right-10">
                 <button @click="storefrontStore.setSidebarActive(!storefrontStore.sidebarActive, MenuPages.GLOBAL)" class="btn-secondary">Components</button>
                 <button @click="preview = !preview" class="btn-secondary">Preview</button>

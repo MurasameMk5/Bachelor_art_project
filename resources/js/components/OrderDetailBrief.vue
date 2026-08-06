@@ -2,7 +2,7 @@
     <div>
         <OrderDetailInfo name="brief" v-if="order.awaiting_confirmation"/>
         <div class="bg-tertiary-300 p-2 my-4 rounded-md">
-            <span class="text-lg">Brief</span>
+            <span class="text-lg">Generate brief</span>
         </div>
 
         <div class="flex place-content-end my-4 gap-4">
