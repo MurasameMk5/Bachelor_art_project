@@ -4,7 +4,6 @@
     </div>
     <div v-else>
         <div class="h-1 w-full bg-gray-300 rounded-full"></div>
-
     </div>
 </template>
 

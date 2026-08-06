@@ -23,6 +23,18 @@ class OrderController extends Controller
             ]);
     }
 
+    #[Authorize('viewAny', Order::class)]
+    public function toDoRequest()
+    {
+        $orders = Order::with(['artist', 'client', 'commission'])->get();
+
+        return Inertia::render('Request', [
+            'orders' => $orders->where('status', 'to do')->values()
+            ]);
+    }
+
+
+
     #[Authorize('view', 'order')]
     public function show(Request $request, Order $order)
     {
@@ -55,7 +67,6 @@ class OrderController extends Controller
                 'max_free_revisions' => $commission->max_free_revisions,
                 'current_revision_count' => 0,
                 'status' => 'to do',
-                'production_stage' => 'brief',
             ]);
 
             foreach ($validated['answers'] ?? [] as $questionId => $value) {

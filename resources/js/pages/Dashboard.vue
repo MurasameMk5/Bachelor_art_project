@@ -5,16 +5,16 @@
         <div class="flex flex-col gap-4">
             <span> Work in progress</span>
             <div class="flex gap-4 justify-center flex-wrap">
-                <Link v-for="order in orders" :key="order.id" :href="`/order/${order.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
+                <Link v-for="order in orders.filter(o => o.status !== 'done')" :key="order.id" :href="`/order/${order.id}`" class="shadow-md h-80 flex flex-col relative rounded-md flex-1 gap-2 hover:shadow-xl transition-shadow">
                     <div class="flex flex-row gap-2 bg-secondary rounded-t-md text-white p-2">
                         <span>{{ order.commission.title }}</span> - <span>{{ order.client.name }}</span>
                     </div>
                     <div class="m-2">
-                        <span class="p-2 border-1 border-secondary rounded-lg">{{ order.production_stage }}</span>
+                        <span class="p-2 border border-secondary rounded-lg">{{ order.production_stage }}</span>
                     </div>
                     <div class="absolute bottom-0 p-4 flex flex-row gap-2 items-center">
                         <Icon icon="lucide:calendar" />
-                        <span> {{ order.deadline }}</span>
+                        <span> {{ order.created_at.split('T')[0] }}</span>
                     </div>
                 </Link>
             </div>
@@ -51,4 +51,3 @@ export default {
     },
 };
 </script>
-

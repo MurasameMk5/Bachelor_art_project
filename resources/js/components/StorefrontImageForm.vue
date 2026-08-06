@@ -13,17 +13,20 @@
         </div>
         <span class="text-sm text-center"> This is a preview. Images will be resized according to their original format.</span>
         <button @click="submit" class="w-full btn-primary">Insert</button>
-    </div>
+        <ModalInfo v-if="confirmationModal" text="Component created"/>
+</div>
 </template>
 
 <script>
 import { Icon } from '@iconify/vue';
 import { useStorefrontStore } from '../stores/storefront';
 import { useForm } from '@inertiajs/vue3';
+import ModalInfo from "./ModalInfo.vue";
 
 export default {
     components: {
         Icon,
+        ModalInfo,
     },
     props: {
         totalComponents: {
@@ -36,6 +39,7 @@ export default {
             storefrontStore: useStorefrontStore(),
             imageNumber: 1,
             imagesSelected: [],
+            confirmationModal: false,
             form: useForm({
                 type: 'image',
                 content: {},
@@ -84,8 +88,12 @@ export default {
                 this.form.position = this.totalComponents;
                 this.form.post('/storefront/components', {
                     onSuccess: () => {
-                        console.log('Composant créé avec succès', this.form);
-                        this.storefrontStore.setSidebarActive(false);
+                        console.log('Composant créé avec succès', this.form)
+                        this.confirmationModal = true;
+                        setTimeout(() => {
+                            this.storefrontStore.setSidebarActive(false);
+                            this.confirmationModal = false;
+                        }, 1500);
                     },
                 });
             }

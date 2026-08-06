@@ -57,8 +57,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
+        <ModalInfo v-if="confirmationModal" text="Component created"/>
     </div>
 </template>
 
@@ -68,6 +68,7 @@ import { MenuPages, useStorefrontStore } from "@/stores/storefront.js";
 import StorefrontCommissionForm from "./StorefrontCommissionForm.vue";
 import StorefrontTosForm from "./StorefrontTosForm.vue";
 import StorefrontImageForm from "./StorefrontImageForm.vue";
+import ModalInfo from "./ModalInfo.vue";
 import { useForm } from "@inertiajs/vue3";
 export default {
     components: {
@@ -75,12 +76,14 @@ export default {
         StorefrontCommissionForm,
         StorefrontTosForm,
         StorefrontImageForm,
+        ModalInfo,
     },
     data() {
         return {
             MenuPages,
             storefrontStore: useStorefrontStore(),
             totalComponents: 0,
+            confirmationModal: false,
             form: useForm({
                 type: 'text',
                 content: {},
@@ -128,7 +131,14 @@ export default {
                 this.form.type = "kanban";
                 this.form.content = {};
             }
-            this.form.post("/storefront/components");
+            this.form.post("/storefront/components", {
+                onSuccess: () => {
+                    this.confirmationModal = true;
+                    setTimeout(() => {
+                        this.confirmationModal = false;
+                    }, 1500)
+                }
+            });
         },
     },
     mounted() {

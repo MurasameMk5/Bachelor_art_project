@@ -75,22 +75,27 @@
         </div>
 
         <button @click="submit" class="btn-primary">Insert</button>
+        <ModalInfo v-if="confirmationModal" text="Component created"/>
     </div>
 </template>
 
 <script>
 import {Icon} from '@iconify/vue';
 import {useForm} from '@inertiajs/vue3';
-import {useStorefrontStore} from '../stores/storefront';
+import { useStorefrontStore } from '../stores/storefront';
+import ModalInfo from './ModalInfo.vue';
+
 
 export default {
     components: {
         Icon,
+        ModalInfo,
     },
     data() {
         return {
             imagesSelected: [],
-            questions:[],
+            questions: [],
+            confirmationModal: false,
             storefrontStore: useStorefrontStore(),
             form: useForm({
                 title: '',
@@ -145,7 +150,14 @@ export default {
                 this.form.patch(`/commissions/${existingId}`);
             } else {
                 console.log("Submitting new commission with data:", this.form);
-                this.form.post('/commissions');
+                this.form.post('/commissions', {
+                    onSuccess: () => {
+                        this.confirmationModal = true;
+                        setTimeout(() => {
+                            this.confirmationModal = false;
+                        }, 1500)
+                    }
+                });
             }
         }
     },
