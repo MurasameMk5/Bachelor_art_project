@@ -81,4 +81,20 @@ class OrderController extends Controller
 
         return redirect()->back();
     }
+
+    #[Authorize('update', 'order')]
+        public function update(Request $request, Order $order)
+        {
+            $validated = $request->validate([
+                'status' => 'sometimes|in:to do,doing,done,cancelled',
+                'production_stage' => 'sometimes|nullable|in:brief,production,revision,final_delivery,awaiting_payment',
+                'final_price' => 'sometimes|integer|min:0',
+                'current_revision_count' => 'sometimes|integer|min:0',
+                'awaiting_confirmation' => 'sometimes|boolean',
+            ]);
+
+            $order->update($validated);
+
+            return redirect()->back();
+        }
 }

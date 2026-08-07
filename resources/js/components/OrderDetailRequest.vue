@@ -15,19 +15,21 @@
             </div>
         </div>
         <div class="flex place-content-end my-4 gap-4">
-            <button class="btn-primary">
+            <button @click="submit('refuse')" class="btn-primary">
                 <span>Refuse request</span>
             </button>
-            <button class="btn-primary-filled">
+            <button @click="submit('confirm')" class="btn-primary-filled">
                 <span>Confirm request</span>
             </button>
         </div>
+        <ModalInfo text="" v-if="confirmationModal"/>
     </div>
 </template>
 
 <script>
 import { Icon } from '@iconify/vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';import ModalInfo from './ModalInfo.vue';
+
 
 export default {
     components: {
@@ -41,7 +43,31 @@ export default {
     },
     data() {
         return {
+            confirmationModal: false,
+            form: useForm({
+                status: '',
+                production_stage : '',
+            })
         };
+    },
+    methods: {
+        submit(value) {
+            if (value === 'confirm') {
+                this.form.status = 'doing';
+                this.form.production_stage = 'brief';
+            }
+            else if (value === 'refuse')
+                this.form.status = 'cancelled';
+            ;
+            this.form.patch(`/order/${this.order.id}`, {
+                onSucess: () => {
+                    this.confirmationModal = true;
+                    setTimeout(() => {
+                        this.confirmationModal = false;
+                    }, 1500)
+                }
+            })
+        }
     },
     mounted() {
     },
