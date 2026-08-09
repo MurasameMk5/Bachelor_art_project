@@ -16,7 +16,7 @@ class OrderController extends Controller
     #[Authorize('viewAny', Order::class)]
     public function index()
     {
-        $orders = Order::with(['artist', 'client', 'commission'])->get();
+        $orders = Order::with(['artist', 'client', 'commission', 'commission.images'])->get();
 
         return Inertia::render('Dashboard', [
             'orders' => $orders

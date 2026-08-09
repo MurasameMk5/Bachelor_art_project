@@ -144,10 +144,10 @@
         <h3>Commission type</h3>
         <p><strong>{{ order.commission.title }}</strong></p>
         <p>{{ order.commission.description }}</p>
-        <p><strong>Client name :</strong> {{ order.client.name }}</p>
-        <p><strong>Client email adress :</strong> {{ order.client.email }}</p>
         <hr>
         <h3>Commission request</h3>
+        <p><strong>Client name :</strong> {{ order.client.name }}</p>
+        <p><strong>Client email adress :</strong> {{ order.client.email }}</p>
             <div v-for="answer in order.answers" :key="answer.id">
                 <strong>{{ answer.question?.text.label }}</strong>
                 <p>
