@@ -32,7 +32,7 @@
 
         <!-- Brief edition view -->
         <div v-else class="border border-slate-200 rounded-lg bg-white">
-            <div class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
+            <div v-if="!order.awaiting_confirmation" class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
                 <button type="button" class="toolbar-btn" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
                     <Icon icon="lucide:text-align-start" class="w-4 h-4" />
                 </button>
@@ -128,10 +128,7 @@
             </div>
         </div>
         <div class="flex place-content-end py-4">
-            <button v-if="order.awaiting_confirmation" inactive class="btn-secondary-filled bg-secondary-300 border-secondary-300">
-                <span>Send brief</span>
-            </button>
-            <button v-else class="btn-secondary-filled">
+            <button v-if="!order.awaiting_confirmation" @click="submit" class="btn-secondary-filled">
                 <span>Send brief</span>
             </button>
         </div>
@@ -165,12 +162,13 @@ import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import { Icon } from '@iconify/vue';
 import OrderDetailInfo from './OrderDetailInfo.vue';
+import { useForm } from '@inertiajs/vue3';
 
 export default {
     components: {
         EditorContent,
-    Icon,
-    OrderDetailInfo,
+        Icon,
+        OrderDetailInfo,
     },
     props: {
         order: {
@@ -180,15 +178,36 @@ export default {
     },
     data() {
         return {
+            awaitingConfirmationModal: false,
             brief_view: false,
             editor: null,
+            form: useForm({
+                awaiting_confirmation: false,
+                stage_details : {}
+            })
         };
+    },
+    methods: {
+        submit() {
+            this.form.awaiting_confirmation = true;
+            this.form.stage_details = {
+                brief: {
+                    brief_html: this.editor.getHTML() // Pas besoin de guillemets, et plus facile à relire !
+                }
+            };
+            this.form.patch(`/order/${this.order.id}`, {
+                onSucess: () => {
+                    this.awaitingConfirmationModal = true;
+                }
+            })
+        }
     },
     mounted() {
         this.$nextTick(() => {
             const briefHTML = this.$refs.briefTemplate.innerHTML;
 
             this.editor = markRaw(new Editor({
+                editable: !this.order.awaiting_confirmation,
                 extensions: [
                     StarterKit,
                     TextAlign.configure({ types: ['heading', 'paragraph'] }),

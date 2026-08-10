@@ -91,6 +91,7 @@ class OrderController extends Controller
                 'final_price' => 'sometimes|integer|min:0',
                 'current_revision_count' => 'sometimes|integer|min:0',
                 'awaiting_confirmation' => 'sometimes|boolean',
+                'stage_details' => 'sometimes|array',
             ]);
 
             $order->update($validated);

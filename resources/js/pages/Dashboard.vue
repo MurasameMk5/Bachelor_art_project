@@ -11,7 +11,7 @@
                         <span>{{ order.commission.title }}</span> - <span>{{ order.client.name }}</span>
                     </div>
                     <div class="m-2 z-5">
-                        <span class="p-2 border border-secondary rounded-lg">{{ order.production_stage }}</span>
+                        <span class="p-2 border-2 border-secondary rounded-lg bg-white">{{ order.production_stage }}</span>
                     </div>
                     <div class="absolute bottom-0 p-4 flex flex-row gap-2 items-center z-5">
                         <Icon icon="lucide:calendar" />

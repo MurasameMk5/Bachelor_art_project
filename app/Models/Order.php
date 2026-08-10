@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(["id", "artist_id", "client_id", "commission_id", "base_price", "final_price", "max_free_revisions", "current_revision_count", "status", "production_stage", "awaiting_confirmation", "invoice_number", "invoice_generated_at"])]
+#[Fillable(["id", "artist_id", "client_id", "commission_id", "base_price", "final_price", "max_free_revisions", "current_revision_count", "status", "production_stage", "stage_details", "awaiting_confirmation", "invoice_number", "invoice_generated_at"])]
 class Order extends Model
 {
     protected function casts(): array
     {
         return [
+            'stage_details' => 'array',
             'awaiting_confirmation' => 'boolean',
         ];
     }

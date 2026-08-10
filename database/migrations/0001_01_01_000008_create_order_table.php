@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedInteger('current_revision_count')->default(0);
             $table->enum('status', ['to do', 'doing', 'done', 'cancelled',])->default('to do');
             $table->enum('production_stage', ['brief', 'production', 'revision', 'final_delivery', 'awaiting_payment'])->nullable();
+            $table->json('stage_details')->nullable();
             $table->boolean('awaiting_confirmation')->default(false);
             $table->string('invoice_number')->nullable()->unique();
             $table->timestamp('invoice_generated_at')->nullable();
