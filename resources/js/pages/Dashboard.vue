@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-4">
             <span> Work in progress</span>
             <div class="flex gap-4 justify-center flex-wrap">
-                <Link v-for="order in orders.filter(o => o.status !== 'done')" :key="order.id" :href="`/order/${order.id}`" class="shadow-md h-80 min-w-1/5 flex flex-col relative gap-2 hover:shadow-xl hover:scale-105 transition-all">
+                <Link v-for="order in orders.filter(o => o.status !== 'done')" :key="order.id" :href="`/orders/${order.id}`" class="shadow-md h-80 min-w-1/5 flex flex-col relative gap-2 hover:shadow-xl hover:scale-105 transition-all">
                     <img :src="order.commission.images[0].storage_path" class="object-cover h-full w-full absolute z-0 rounded-t-md"/>
                     <div class="flex flex-row gap-2 bg-secondary rounded-t-md text-white p-2 z-5">
                         <span>{{ order.commission.title }}</span> - <span>{{ order.client.name }}</span>

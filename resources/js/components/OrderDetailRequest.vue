@@ -59,7 +59,7 @@ export default {
             else if (value === 'refuse')
                 this.form.status = 'cancelled';
             ;
-            this.form.patch(`/order/${this.order.id}`, {
+            this.form.patch(`/orders/${this.order.id}`, {
                 onSucess: () => {
                     this.confirmationModal = true;
                     setTimeout(() => {

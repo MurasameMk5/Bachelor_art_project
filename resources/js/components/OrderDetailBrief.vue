@@ -195,7 +195,7 @@ export default {
                     brief_html: this.editor.getHTML() // Pas besoin de guillemets, et plus facile à relire !
                 }
             };
-            this.form.patch(`/order/${this.order.id}`, {
+            this.form.patch(`/orders/${this.order.id}`, {
                 onSucess: () => {
                     this.awaitingConfirmationModal = true;
                 }
@@ -203,8 +203,12 @@ export default {
         }
     },
     mounted() {
+        const briefHTML = '';
         this.$nextTick(() => {
-            const briefHTML = this.$refs.briefTemplate.innerHTML;
+            if (this.form.stage_details.brief.brief_html)
+                briefHTML = this.form.stage_details.brief.brief_html;
+            else
+                briefHTML = this.$refs.briefTemplate.innerHTML;
 
             this.editor = markRaw(new Editor({
                 editable: !this.order.awaiting_confirmation,

@@ -34,8 +34,8 @@ Route::get('/request', [OrderController::class, 'toDoRequest'])->middleware(['au
 // routes/web.php
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);
-    Route::get('/order/{order}', [OrderController::class, 'show'])->name('order.show');
-    Route::patch('/order/{order}', [OrderController::class, 'update']);
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('order.show');
+    Route::patch('/orders/{order}', [OrderController::class, 'update']);
 });
 
 Route::get('/{storefront:slug}', [StorefrontController::class, 'showClient']);

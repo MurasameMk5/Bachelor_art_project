@@ -1,6 +1,6 @@
 <template>
     <div class="mt-4 w-4/5 mx-auto flex flex-col gap-4">
-        <Link v-for="order in orders" :href="`/order/${order.id}`" class="group flex flex-col px-4 rounded-2xl component-border hover:bg-amber-100 ">
+        <Link v-for="order in orders" :href="`/orders/${order.id}`" class="group flex flex-col px-4 rounded-2xl component-border hover:bg-amber-100 ">
             <div class="component-title rounded-xl">
                 <h1>New request !</h1>
             </div>

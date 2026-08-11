@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -81,7 +82,6 @@ class OrderController extends Controller
 
         return redirect()->back();
     }
-
     #[Authorize('update', 'order')]
         public function update(Request $request, Order $order)
         {
@@ -92,8 +92,39 @@ class OrderController extends Controller
                 'current_revision_count' => 'sometimes|integer|min:0',
                 'awaiting_confirmation' => 'sometimes|boolean',
                 'stage_details' => 'sometimes|array',
+                'image_stages' => 'sometimes|array',
+                'files' => 'sometimes|array',
+                'files.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
             ]);
 
+            $stageDetails = $validated['stage_details'] ?? $order->stage_details ?? [];
+
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+                $stages = $request->input('image_stages', []);
+
+                foreach ($files as $index => $file) {
+                    if ($file->isValid()) {
+                        $path = $file->store('order-images', 'public');
+                        $url = Storage::url($path);
+
+                        $stage = $stages[$index] ?? 'general';
+
+                        if (!isset($stageDetails['production'][$stage])) {
+                            $stageDetails['production'][$stage] = [];
+                        }
+
+                        $stageDetails['production'][$stage][] = [
+                            'url' => $url,
+                            'name' => $file->getClientOriginalName(),
+                            'uploaded_at' => now()->toDateTimeString(),
+                        ];
+                    }
+                }
+
+                $validated['stage_details'] = $stageDetails;
+            }
+            unset($validated['files'], $validated['image_stages']);
             $order->update($validated);
 
             return redirect()->back();
