@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="bg-tertiary-300 p-2 my-4 rounded-md">
+        <div class="bg-secondary p-2 my-4 rounded-md">
             <span class="text-lg">Request detail</span>
         </div>
 

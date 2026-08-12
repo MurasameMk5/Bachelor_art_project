@@ -1,7 +1,7 @@
 <template>
     <div>
         <OrderDetailInfo name="brief" v-if="order.awaiting_confirmation"/>
-        <div class="bg-tertiary-300 p-2 my-4 rounded-md">
+        <div class="bg-secondary p-2 my-4 rounded-md">
             <span class="text-lg">Generate brief</span>
         </div>
 

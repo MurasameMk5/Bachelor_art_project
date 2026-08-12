@@ -1,6 +1,6 @@
 <template>
     <div v-if="$page.props.auth.user"
-        class="border-b border-b-secondary px-4 mt-2  sm:px-8 lg:px-12 flex flex-row justify-between"
+        class="border-b border-b-secondary px-4 mt-2  sm:px-8 lg:px-12 flex flex-row justify-between items-center"
     >
         <div
         class="flex flex-row gap-6 py-4 text-sm sm:gap-10  lg:gap-12 items-center "
@@ -17,7 +17,7 @@
             </Link>
         </div>
         <div v-if="$page.props.auth.user" @click="logout"
-        class="rounded-full bg-tertiary-300 flex justify-center items-center px-4 py-2 gap-2 cursor-pointer">
+        class="rounded-full bg-tertiary-300 flex items-center px-4 h-10 cursor-pointer">
             <span class="text-sm">Log out</span>
         </div>
     </div>

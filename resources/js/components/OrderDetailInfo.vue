@@ -1,6 +1,6 @@
 <template>
     <div class="m-4 p-4 rounded-lg bg-tertiary-300 border-2 border-tertiary">
-        <p>The {{ name }} has been sent to the client for confirmation!</p>
+        <p>{{displayText}}</p>
     </div>
 </template>
 
@@ -11,6 +11,20 @@ export default {
             type: String,
             required: true,
         },
+        text: {
+            type: String,
+            required: false,
+            default: null
+        }
     },
+    computed: {
+        displayText() {
+            if (this.text) {
+                return this.text;
+            }
+
+            return `The ${this.name} has been sent to the client for confirmation!`;
+        }
+    }
 }
 </script>

@@ -1,8 +1,6 @@
 <template>
     <div class="flex flex-col gap-4">
-        <OrderDetailInfo v-if="order.awaiting_confirmation" />
-
-        <div class="bg-tertiary-300 p-2 my-4 rounded-md">
+        <div class="bg-secondary p-2 my-4 rounded-md">
             <span class="text-lg">Production</span>
         </div>
         <span>Insert images</span>
@@ -14,6 +12,7 @@
                 <option value="Sketch">Sketch</option>
                 <option value="Rendering">Rendering</option>
                 <option value="Inking">Inking</option>
+                <option value="Other">Other</option>
             </select>
         </div>
 
@@ -43,17 +42,18 @@
                 <span>{{ form.processing ? 'Sending...' : 'Send images' }}</span>
             </button>
         </div>
+        <ModalInfo v-if="confirmationModal" text="The images have been sent"/>
     </div>
 </template>
 
 <script>
 import { Icon } from '@iconify/vue';
 import { useForm } from '@inertiajs/vue3';
-import OrderDetailInfo from './OrderDetailInfo.vue';
+import ModalInfo from './ModalInfo.vue';
 export default {
     components: {
         Icon,
-        OrderDetailInfo
+        ModalInfo
     },
     props: {
         order: {
@@ -63,6 +63,7 @@ export default {
     },
     data() {
         return {
+            confirmationModal: false,
             imagesSelected: [],
             selectedStage: "",
             stageSelected: [],
@@ -133,6 +134,10 @@ export default {
                     preserveState: true,
                     onSuccess: () => {
                         console.log('Images sent successfully!');
+                        this.confirmationModal = true;
+                        setTimeout(() => {
+                            this.confirmationModal = false;
+                        }, 1500);
                     }
                 });
         }
