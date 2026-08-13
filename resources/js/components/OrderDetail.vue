@@ -6,6 +6,7 @@
             <OrderDetailBrief v-else-if="order.status === 'doing' && order.production_stage === 'brief'" :order="order"/>
             <OrderDetailProduction v-else-if="order.status === 'doing' && order.production_stage === 'production'" :order="order"/>
             <OrderDetailPayment v-else-if="order.status === 'doing' && order.production_stage === 'awaiting_payment'" :order="order"/>
+            <OrderDetailRevision v-else-if="order.status === 'doing' && order.production_stage === 'revision'" :order="order"/>
         </div>
     </div>
 </template>
@@ -15,13 +16,15 @@ import OrderDetailRequest from './OrderDetailRequest.vue';
 import OrderDetailBrief from './OrderDetailBrief.vue';
 import OrderDetailProduction from './OrderDetailProduction.vue';
 import OrderDetailPayment from './OrderDetailPayment.vue';
+import OrderDetailRevision from './OrderDetailRevision.vue';
 
 export default {
     components: {
         OrderDetailRequest,
         OrderDetailBrief,
         OrderDetailProduction,
-        OrderDetailPayment
+        OrderDetailPayment,
+        OrderDetailRevision
     },
     props: {
         order: {
