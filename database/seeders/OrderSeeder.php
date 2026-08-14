@@ -8,42 +8,138 @@ use Illuminate\Support\Facades\DB;
 class OrderSeeder extends Seeder
 {
     /**
-     * 10 commandes reliant artistes, clients et commissions existants.
+     * Commandes réalistes liées aux commissions existantes.
+     * Une commande par commission pour garantir la même volumétrie par artiste.
      * Nécessite que UserSeeder et CommissionSeeder aient déjà tourné.
      */
     public function run(): void
     {
-        $artistIds = DB::table('users')->where('role', 'artist')->pluck('id');
-        $clientIds = DB::table('users')->where('role', 'client')->pluck('id');
-        $commissions = DB::table('commissions')->get();
+        $clientIds = DB::table('users')
+            ->where('role', 'client')
+            ->orderBy('id')
+            ->pluck('id');
+        $commissions = DB::table('commissions')
+            ->orderBy('id')
+            ->get();
 
-        if ($artistIds->isEmpty() || $clientIds->isEmpty() || $commissions->isEmpty()) {
+        if ($clientIds->isEmpty() || $commissions->isEmpty()) {
             $this->command->warn('Utilisateurs ou commissions manquants, exécutez UserSeeder et CommissionSeeder avant.');
             return;
         }
 
-        $statuses = ['to do', 'doing', 'done'];
-        $stages = ['brief', 'production', 'revision', 'awaiting_payment'];
+        $scenarios = [
+            ['status' => 'to do', 'stage' => null, 'awaiting_confirmation' => false, 'revision_count' => 0, 'extra_price' => 0, 'stage_details' => null],
+            [
+                'status' => 'doing',
+                'stage' => 'brief',
+                'awaiting_confirmation' => false,
+                'revision_count' => 0,
+                'extra_price' => 0,
+                'stage_details' => [
+                    'brief' => [
+                        'brief_html' => '<h2>Art commission brief</h2><p>Première synthèse du besoin client avec références visuelles.</p>',
+                    ],
+                ],
+            ],
+            [
+                'status' => 'doing',
+                'stage' => 'production',
+                'awaiting_confirmation' => true,
+                'revision_count' => 0,
+                'extra_price' => 80,
+                'stage_details' => [
+                    'production' => [
+                        'Sketch' => [
+                            [
+                                'url' => '/storage/order-images/sketch-01.webp',
+                                'name' => 'sketch-01.webp',
+                                'uploaded_at' => now()->subDays(2)->toDateTimeString(),
+                            ],
+                        ],
+                        'Rendering' => [
+                            [
+                                'url' => '/storage/order-images/render-01.webp',
+                                'name' => 'render-01.webp',
+                                'uploaded_at' => now()->subDay()->toDateTimeString(),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'status' => 'doing',
+                'stage' => 'revision',
+                'awaiting_confirmation' => true,
+                'revision_count' => 1,
+                'extra_price' => 120,
+                'stage_details' => [
+                    'revision' => [
+                        [
+                            'request' => 'Pouvez-vous renforcer le contraste sur le personnage principal et adoucir l arrière-plan ?',
+                        ],
+                    ],
+                    'production' => [
+                        'Inking' => [
+                            [
+                                'url' => '/storage/order-images/inking-01.webp',
+                                'name' => 'inking-01.webp',
+                                'uploaded_at' => now()->subDays(3)->toDateTimeString(),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'status' => 'doing',
+                'stage' => 'awaiting_payment',
+                'awaiting_confirmation' => false,
+                'revision_count' => 1,
+                'extra_price' => 150,
+                'stage_details' => [
+                    'awaiting_payment' => [
+                        'base' => null,
+                    ],
+                ],
+            ],
+            [
+                'status' => 'done',
+                'stage' => 'final_delivery',
+                'awaiting_confirmation' => false,
+                'revision_count' => 1,
+                'extra_price' => 150,
+                'stage_details' => [
+                    'awaiting_payment' => [
+                        'base' => 50,
+                    ],
+                ],
+            ],
+        ];
 
-        for ($i = 1; $i <= 10; $i++) {
-            $commission = $commissions[$i % $commissions->count()];
+        foreach ($commissions as $index => $commission) {
+            $scenario = $scenarios[$index % count($scenarios)];
             $basePrice = $commission->base_price;
+            $revisionCount = min($scenario['revision_count'], $commission->max_free_revisions);
+            $createdAt = now()->subDays(60 - ($index % 30));
+            $invoiceGeneratedAt = $scenario['status'] === 'to do' ? null : $createdAt->copy()->addDay();
 
             DB::table('orders')->insert([
                 'artist_id' => $commission->artist_id,
-                'client_id' => $clientIds[$i % $clientIds->count()],
+                'client_id' => $clientIds[$index % $clientIds->count()],
                 'commission_id' => $commission->id,
                 'base_price' => $basePrice,
-                'final_price' => $basePrice,
+                'final_price' => $basePrice + $scenario['extra_price'],
                 'max_free_revisions' => $commission->max_free_revisions,
-                'current_revision_count' => rand(0, $commission->max_free_revisions),
-                'status' => $statuses[$i % count($statuses)],
-                'production_stage' => $stages[$i % count($stages)],
-                'awaiting_confirmation' => rand(0, 1) === 1,
-                'invoice_number' => sprintf('INV-2026-%04d', $i),
-                'invoice_generated_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'current_revision_count' => $revisionCount,
+                'status' => $scenario['status'],
+                'production_stage' => $scenario['stage'],
+                'stage_details' => $scenario['stage_details'] !== null
+                    ? json_encode($scenario['stage_details'], JSON_UNESCAPED_UNICODE)
+                    : null,
+                'awaiting_confirmation' => $scenario['awaiting_confirmation'],
+                'invoice_number' => $scenario['status'] === 'to do' ? null : sprintf('INV-2026-%04d', $index + 1),
+                'invoice_generated_at' => $invoiceGeneratedAt,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt->copy()->addDays(3),
             ]);
         }
     }

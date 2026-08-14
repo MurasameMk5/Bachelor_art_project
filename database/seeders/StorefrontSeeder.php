@@ -9,22 +9,27 @@ use Illuminate\Support\Str;
 class StorefrontSeeder extends Seeder
 {
     /**
-     * 10 storefronts, un par utilisateur ayant le rôle "artist".
+     * Un storefront par artiste.
      * Nécessite que UserSeeder ait déjà tourné.
      */
     public function run(): void
     {
-        $artistIds = DB::table('users')->where('role', 'artist')->pluck('id');
+        $artists = DB::table('users')
+            ->where('role', 'artist')
+            ->orderBy('id')
+            ->get(['id', 'name']);
 
-        if ($artistIds->isEmpty()) {
+        if ($artists->isEmpty()) {
             $this->command->warn('Aucun artiste trouvé, exécutez UserSeeder avant StorefrontSeeder.');
             return;
         }
 
-        for ($i = 1; $i <= $artistIds->count(); $i++) {
+        foreach ($artists as $artist) {
+            $baseSlug = Str::slug($artist->name);
+
             DB::table('storefronts')->insert([
-                'user_id' => $artistIds[$i % $artistIds->count()],
-                'slug' => Str::slug("artist-storefront-$i") . '-' . Str::random(4),
+                'user_id' => $artist->id,
+                'slug' => "{$baseSlug}-commissions",
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

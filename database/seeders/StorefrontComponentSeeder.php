@@ -8,62 +8,63 @@ use Illuminate\Support\Facades\DB;
 class StorefrontComponentSeeder extends Seeder
 {
     /**
-     * 10 composants répartis sur les storefronts existants.
+     * Composants de storefront cohérents avec les commissions.
      * Nécessite que StorefrontSeeder ET CommissionSeeder aient déjà tourné.
      */
     public function run(): void
     {
-        $storefrontIds = DB::table('storefronts')->pluck('id');
-        $commissionIds = DB::table('commissions')->pluck('id');
+        $storefronts = DB::table('storefronts')
+            ->orderBy('id')
+            ->get(['id', 'user_id']);
+        $commissionsByArtist = DB::table('commissions')
+            ->orderBy('id')
+            ->get(['id', 'artist_id'])
+            ->groupBy('artist_id');
 
-        if ($storefrontIds->isEmpty()) {
+        if ($storefronts->isEmpty()) {
             $this->command->warn('Aucun storefront trouvé, exécutez StorefrontSeeder avant.');
             return;
         }
 
-        if ($commissionIds->isEmpty()) {
+        if ($commissionsByArtist->isEmpty()) {
             $this->command->warn('Aucune commission trouvée, exécutez CommissionSeeder avant.');
             return;
         }
 
-        $types = ['commission', 'text', 'image', 'kanban', 'divider'];
-        $commissionIndex = 0;
+        foreach ($storefronts as $storefront) {
+            $position = 1;
+            $components = [
+                ['type' => 'text', 'content' => ['text' => 'Bienvenue sur mon atelier. Je réponds sous 24h les jours ouvrés.']],
+                ['type' => 'image', 'content' => ['image_nb' => 1, 'images' => [['ref' => '/samples/storefront/header.webp', 'label' => 'Bannière atelier']]]],
+                ['type' => 'tos', 'content' => ['text' => 'Paiement 50% à la validation du brief, 50% à la livraison finale.']],
+                ['type' => 'divider', 'content' => []],
+            ];
 
-        for ($i = 1; $i <= 10; $i++) {
-            $type = $types[$i % count($types)];
-            $content = [];
-
-            // Si c't un composant commission, on prend une vraie commission dispo
-            $assignedCommissionId = null;
-            if ($type === 'commission') {
-                $assignedCommissionId = $commissionIds[$commissionIndex % $commissionIds->count()];
-                $content = ['commission_id' => $assignedCommissionId];
-                $commissionIndex++;
-            } else {
-                $content = match ($type) {
-                    'text' => ['text' => 'Bienvenue sur ma vitrine, contactez-moi pour toute commande.'],
-                    'image' => ['image_nb' => 1, 'images' => [['ref' => '/Akihiko Yoshida-min.png', 'label' => 'Exemple de travail']]],
-                    'kanban' => ['columns' => ['A faire', 'En cours', 'Terminé']],
-                    'divider' => [],
-                    default => [],
-                };
+            foreach ($components as $component) {
+                DB::table('storefront_components')->insert([
+                    'storefront_id' => $storefront->id,
+                    'type' => $component['type'],
+                    'position' => $position++,
+                    'content' => json_encode($component['content'], JSON_UNESCAPED_UNICODE),
+                    'is_visible' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
-            // Insertion du composant
-            $componentId = DB::table('storefront_components')->insertGetId([
-                'storefront_id' => $storefrontIds[$i % $storefrontIds->count()],
-                'type' => $type,
-                'position' => $i,
-                'content' => json_encode($content),
-                'is_visible' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            foreach ($commissionsByArtist->get($storefront->user_id, collect()) as $commission) {
+                $componentId = DB::table('storefront_components')->insertGetId([
+                    'storefront_id' => $storefront->id,
+                    'type' => 'commission',
+                    'position' => $position++,
+                    'content' => json_encode(['commission_id' => $commission->id]),
+                    'is_visible' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
-            // Si c'est un composant commission, on met à jour le component_id dans la table commissions
-            if ($assignedCommissionId) {
                 DB::table('commissions')
-                    ->where('id', $assignedCommissionId)
+                    ->where('id', $commission->id)
                     ->update(['component_id' => $componentId]);
             }
         }

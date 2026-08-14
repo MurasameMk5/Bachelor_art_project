@@ -8,44 +8,64 @@ use Illuminate\Support\Facades\DB;
 class MessageSeeder extends Seeder
 {
     /**
-     * 10 messages répartis sur les commandes existantes.
-     * L'expéditeur alterne entre l'artiste et le client de la commande.
+     * Conversations réalistes entre client et artiste.
      * Nécessite que OrderSeeder ait déjà tourné.
      */
     public function run(): void
     {
-        $orders = DB::table('orders')->get();
+        $orders = DB::table('orders')
+            ->orderBy('id')
+            ->get(['id', 'artist_id', 'client_id', 'production_stage']);
 
         if ($orders->isEmpty()) {
             $this->command->warn('Aucune commande trouvée, exécutez OrderSeeder avant MessageSeeder.');
             return;
         }
 
-        $contents = [
-            ['production_stage' => 'brief', 'text' => 'Bonjour, je viens de valider ma commande, hâte de voir le résultat !'],
-            ['production_stage' => 'production', 'text' => 'J\'ai commencé à travailler sur votre commande, je vous tiendrai au courant de l\'avancement.'],
-            ['production_stage' => 'revision', 'text' => 'J\'ai terminé la première version, pouvez-vous me donner vos retours ?'],
-            ['production_stage' => 'awaiting_payment', 'text' => 'Merci pour votre travail ! Je vais procéder au paiement maintenant.'],
-            ['production_stage' => 'brief', 'text' => 'Je suis impatient de voir le résultat final !'],
-            ['production_stage' => 'production', 'text' => 'Je rencontre un petit problème technique, je vais devoir prendre un peu plus de temps.'],
-            ['production_stage' => 'revision', 'text' => 'J\'ai apporté les modifications demandées, pouvez-vous vérifier ?'],
-            ['production_stage' => 'awaiting_payment', 'text' => 'Le paiement a été effectué, merci pour votre travail !'],
-            ['production_stage' => 'brief', 'text' => 'Je viens de valider la commande, merci !'],
-            ['production_stage' => 'production', 'text' => 'La commande est presque terminée, je vous enverrai un aperçu bientôt.'],
+        $threadsByStage = [
+            'brief' => [
+                ['from' => 'client', 'text' => 'Bonjour ! Je confirme le brief et les références envoyées.'],
+                ['from' => 'artist', 'text' => 'Parfait, merci. Je vous envoie un premier rough sous 48h.'],
+                ['from' => 'client', 'text' => 'Super, hâte de voir la proposition.'],
+            ],
+            'production' => [
+                ['from' => 'artist', 'text' => 'La composition principale est posée, je peaufine les lumières.'],
+                ['from' => 'client', 'text' => 'Top, je valide bien cette direction.'],
+                ['from' => 'artist', 'text' => 'Merci pour le retour rapide, je continue la finalisation.'],
+            ],
+            'revision' => [
+                ['from' => 'artist', 'text' => 'Version 1 livrée. Je suis preneur de vos retours détaillés.'],
+                ['from' => 'client', 'text' => 'Pouvez-vous renforcer le contraste et ajuster le fond ?'],
+                ['from' => 'artist', 'text' => 'Bien reçu, je vous envoie la révision ce soir.'],
+            ],
+            'awaiting_payment' => [
+                ['from' => 'artist', 'text' => 'Livraison finale effectuée avec fichiers HD.'],
+                ['from' => 'client', 'text' => 'Tout est conforme, je procède au paiement dans la journée.'],
+                ['from' => 'artist', 'text' => 'Merci beaucoup pour votre confiance !'],
+            ],
+            'final_delivery' => [
+                ['from' => 'artist', 'text' => 'Merci encore pour le projet, le dossier final reste accessible ici.'],
+                ['from' => 'client', 'text' => 'Travail impeccable, je reviendrai pour une prochaine commande.'],
+            ],
         ];
 
-        for ($i = 1; $i <= 10; $i++) {
-            $order = $orders[$i % $orders->count()];
-            $sender = $i % 2 === 0 ? $order->artist_id : $order->client_id;
+        foreach ($orders as $order) {
+            $threadStage = $order->production_stage ?? 'brief';
+            $thread = $threadsByStage[$threadStage] ?? $threadsByStage['brief'];
 
-            DB::table('messages')->insert([
-                'order_id' => $order->id,
-                'sender_id' => $sender,
-                'content' => json_encode($contents[$i - 1]),
-                'attachment_path' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            foreach ($thread as $step => $message) {
+                DB::table('messages')->insert([
+                    'order_id' => $order->id,
+                    'sender_id' => $message['from'] === 'artist' ? $order->artist_id : $order->client_id,
+                    'content' => json_encode([
+                        'production_stage' => $threadStage,
+                        'text' => $message['text'],
+                    ], JSON_UNESCAPED_UNICODE),
+                    'attachment_path' => null,
+                    'created_at' => now()->subDays(6 - $step),
+                    'updated_at' => now()->subDays(6 - $step),
+                ]);
+            }
         }
     }
 }

@@ -8,29 +8,45 @@ use Illuminate\Support\Facades\DB;
 class ContractSeeder extends Seeder
 {
     /**
-     * 10 contrats, un par commande existante (dans la limite de 10 commandes).
+     * Contrats générés à partir des réponses réelles des commandes.
      * Nécessite que OrderSeeder ait déjà tourné.
      */
     public function run(): void
     {
-        $orderIds = DB::table('orders')->pluck('id');
+        $orders = DB::table('orders')
+            ->orderBy('id')
+            ->get(['id', 'status', 'created_at']);
 
-        if ($orderIds->isEmpty()) {
+        if ($orders->isEmpty()) {
             $this->command->warn('Aucune commande trouvée, exécutez OrderSeeder avant ContractSeeder.');
             return;
         }
 
-        for ($i = 1; $i <= 10; $i++) {
+        foreach ($orders as $order) {
+            $answers = DB::table('answers')
+                ->join('questions', 'questions.id', '=', 'answers.question_id')
+                ->where('answers.order_id', $order->id)
+                ->orderBy('answers.id')
+                ->get(['questions.text', 'answers.value'])
+                ->map(function ($item) {
+                    $question = json_decode($item->text, true) ?? [];
+                    return [
+                        'question' => $question['label'] ?? 'Question',
+                        'answer' => json_decode($item->value, true),
+                    ];
+                })
+                ->values();
+
             DB::table('contracts')->insert([
-                'order_id' => $orderIds[$i % $orderIds->count()],
-                'unique_reference' => sprintf('CTR-2026-%04d', $i),
+                'order_id' => $order->id,
+                'unique_reference' => sprintf('CTR-2026-%04d', $order->id),
                 'answers_snapshot' => json_encode([
                     'snapshot_taken_at' => now()->toDateTimeString(),
-                    'answers' => ["Réponse figée #$i"],
-                ]),
-                'signed_at' => $i % 3 === 0 ? null : now(),
-                'created_at' => now(),
-                'updated_at' => now(),
+                    'answers' => $answers,
+                ], JSON_UNESCAPED_UNICODE),
+                'signed_at' => $order->status === 'to do' ? null : now()->subDays(7),
+                'created_at' => $order->created_at,
+                'updated_at' => now()->subDays(2),
             ]);
         }
     }

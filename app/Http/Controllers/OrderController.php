@@ -10,14 +10,15 @@ use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
 
     #[Authorize('viewAny', Order::class)]
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['artist', 'client', 'commission', 'commission.images'])->get();
+        $orders = Order::with(['artist', 'client', 'commission', 'commission.images'])->where('artist_id', $request->user()->id)->get();
 
         return Inertia::render('Dashboard', [
             'orders' => $orders
@@ -25,9 +26,9 @@ class OrderController extends Controller
     }
 
     #[Authorize('viewAny', Order::class)]
-    public function toDoRequest()
+    public function toDoRequest(Request $request)
     {
-        $orders = Order::with(['artist', 'client', 'commission'])->get();
+        $orders = Order::with(['artist', 'client', 'commission'])->where('artist_id', $request->user()->id)->get();
 
         return Inertia::render('Request', [
             'orders' => $orders->where('status', 'to do')->values()
@@ -52,13 +53,15 @@ class OrderController extends Controller
         $validated = $request->validate([
             'commission_id' => 'required|exists:commissions,id',
             'answers' => 'sometimes|array',
+            'answers.*.*' => 'file|mimes:jpeg,png,jpg,gif,webp,pdf|max:10240',
         ]);
 
         $commission = Commission::findOrFail($validated['commission_id']);
+        $commissionQuestions = $commission->questions()->get(['id', 'field_type']);
 
         Gate::authorize('create', [Order::class, $commission]);
 
-        $order = DB::transaction(function () use ($commission, $request, $validated) {
+        $order = DB::transaction(function () use ($commission, $request, $commissionQuestions) {
             $order = Order::create([
                 'artist_id' => $commission->artist->id,
                 'client_id' => $request->user()->id,
@@ -70,10 +73,56 @@ class OrderController extends Controller
                 'status' => 'to do',
             ]);
 
-            foreach ($validated['answers'] ?? [] as $questionId => $value) {
+            $inputAnswers = $request->input('answers', []);
+            $fileAnswers = $request->file('answers', []);
+
+            foreach ($commissionQuestions as $question) {
+                $questionId = (string) $question->id;
+
+                if ($question->field_type === 'file') {
+                    $uploadedFiles = $fileAnswers[$questionId] ?? [];
+                    if (!is_array($uploadedFiles)) {
+                        $uploadedFiles = $uploadedFiles ? [$uploadedFiles] : [];
+                    }
+
+                    $storedFiles = [];
+
+                    foreach ($uploadedFiles as $file) {
+                        if (!$file->isValid()) {
+                            throw ValidationException::withMessages([
+                                "answers.{$questionId}" => 'Un fichier envoyé est invalide.',
+                            ]);
+                        }
+
+                        $path = $file->store('order-files', 'public');
+                        $storedFiles[] = [
+                            'url' => Storage::url($path),
+                            'name' => $file->getClientOriginalName(),
+                        ];
+                    }
+
+                    if (empty($storedFiles)) {
+                        continue;
+                    }
+
+                    $order->answers()->create([
+                        'question_id' => $question->id,
+                        'value' => [
+                            'text' => implode(', ', array_column($storedFiles, 'name')),
+                            'files' => $storedFiles,
+                        ],
+                    ]);
+                    continue;
+                }
+
+                $value = $inputAnswers[$questionId] ?? null;
+                if ($value === null || $value === '') {
+                    continue;
+                }
+
                 $order->answers()->create([
                     'question_id' => $questionId,
-                    'value' => ['text' => $value],
+                    'value' => ['text' => (string) $value],
                 ]);
             }
 

@@ -26,13 +26,19 @@
             </div>
             <div v-for="answer in order.answers" :key="answer.id" class="flex flex-col gap-2">
                 <label :for="`question${answer.question_id}`" class="block ml-2"> {{ answer.question?.text.label }}</label>
-                <input type="text" readonly="readonly" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="answer.value.text"/>
+                <div v-if="hasFiles(answer)" class="flex flex-wrap gap-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+                    <a v-for="file in answer.value.files" key="file.url":href="file.url" target="_blank" rel="noopener noreferrer" class="flex flex-col gap-2 items-center">
+                        <img v-if="isImage(file)" :src="file.url":alt="file.name" class="h-24 w-24 rounded-md object-cover"/>
+                        <span class="max-w-32 truncate text-sm text-secondary underline">{{ file.name }}</span>
+                    </a>
+                </div>
+                <input v-else type="text" readonly="readonly" class="bg-slate-50 border-slate-200 border-1 rounded-md w-full p-3 h-10" :placeholder="answer.value.text"/>
             </div>
         </div>
 
         <!-- Brief edition view -->
         <div v-else class="border border-slate-200 rounded-lg bg-white">
-            <div v-if="!order.awaiting_confirmation" class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
+            <div v-if="editor && !order.awaiting_confirmation" class="flex flex-wrap items-center gap-1 p-2 bg-slate-50 border-b border-slate-200">
                 <button type="button" class="toolbar-btn" :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }" @click="editor.chain().focus().setTextAlign('left').run()">
                     <Icon icon="lucide:text-align-start" class="w-4 h-4" />
                 </button>
@@ -150,6 +156,11 @@
                 <p>
                     {{ answer.value.text }}
                 </p>
+                <ul v-if="hasFiles(answer)">
+                    <li v-for="file in answer.value.files" :key="file.url">
+                        <a :href="file.url" target="_blank" rel="noopener noreferrer">{{ file.name }}</a>
+                    </li>
+                </ul>
             </div>
     </div>
 </template>
@@ -188,11 +199,17 @@ export default {
         };
     },
     methods: {
+        hasFiles(answer) {
+            return Array.isArray(answer?.value?.files) && answer.value.files.length > 0;
+        },
+        isImage(file) {
+            return /\.(png|jpe?g|gif|webp)$/i.test(file?.name ?? '');
+        },
         submit() {
             this.form.awaiting_confirmation = true;
             this.form.stage_details = {
                 brief: {
-                    brief_html: this.editor.getHTML() // Pas besoin de guillemets, et plus facile à relire !
+                    brief_html: this.editor.getHTML()
                 }
             };
             this.form.patch(`/orders/${this.order.id}`, {
@@ -203,9 +220,9 @@ export default {
         }
     },
     mounted() {
-        const briefHTML = '';
+        let briefHTML = '';
         this.$nextTick(() => {
-            if (this.form.stage_details.brief.brief_html)
+            if (this.order.stage_details?.brief?.brief_html)
                 briefHTML = this.form.stage_details.brief.brief_html;
             else
                 briefHTML = this.$refs.briefTemplate.innerHTML;

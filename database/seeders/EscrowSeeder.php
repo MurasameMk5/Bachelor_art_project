@@ -4,35 +4,43 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class EscrowSeeder extends Seeder
 {
     /**
-     * 10 escrows, un par commande existante (dans la limite de 10 commandes).
+     * Escrows cohérents avec l'état réel des commandes.
      * Nécessite que OrderSeeder ait déjà tourné.
      */
     public function run(): void
     {
-        $orderIds = DB::table('orders')->pluck('id');
+        $orders = DB::table('orders')
+            ->orderBy('id')
+            ->get(['id', 'status', 'created_at']);
 
-        if ($orderIds->isEmpty()) {
+        if ($orders->isEmpty()) {
             $this->command->warn('Aucune commande trouvée, exécutez OrderSeeder avant EscrowSeeder.');
             return;
         }
 
-        $fundsStatuses = ['pending', 'held', 'held', 'released', 'refunded', 'disputed'];
-
-        for ($i = 1; $i <= 10; $i++) {
-            $status = $fundsStatuses[$i % count($fundsStatuses)];
+        foreach ($orders as $order) {
+            $status = match ($order->status) {
+                'to do' => 'pending',
+                'doing' => 'held',
+                'done' => 'released',
+                'cancelled' => 'refunded',
+                default => 'pending',
+            };
+            $heldAt = in_array($status, ['held', 'released', 'refunded'], true)
+                ? $order->created_at
+                : null;
 
             DB::table('escrows')->insert([
-                'order_id' => $orderIds[$i % $orderIds->count()],
-                'stripe_payment_intent_id' => 'pi_' . Str::random(24),
+                'order_id' => $order->id,
+                'stripe_payment_intent_id' => 'pi_seed_' . sprintf('%012d', $order->id),
                 'funds_status' => $status,
-                'held_at' => in_array($status, ['held', 'released', 'refunded', 'disputed']) ? now() : null,
-                'released_at' => $status === 'released' ? now() : null,
-                'created_at' => now(),
+                'held_at' => $heldAt,
+                'released_at' => $status === 'released' ? now()->subDays(1) : null,
+                'created_at' => $order->created_at,
                 'updated_at' => now(),
             ]);
         }

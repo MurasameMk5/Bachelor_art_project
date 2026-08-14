@@ -8,29 +8,39 @@ use Illuminate\Support\Facades\DB;
 class DeliverableSeeder extends Seeder
 {
     /**
-     * 10 livrables répartis sur les commandes existantes.
+     * Livrables cohérents avec l'avancement des commandes.
      * Nécessite que OrderSeeder ait déjà tourné.
      */
     public function run(): void
     {
-        $orderIds = DB::table('orders')->pluck('id');
+        $orders = DB::table('orders')
+            ->orderBy('id')
+            ->get(['id', 'status', 'current_revision_count', 'created_at']);
 
-        if ($orderIds->isEmpty()) {
+        if ($orders->isEmpty()) {
             $this->command->warn('Aucune commande trouvée, exécutez OrderSeeder avant DeliverableSeeder.');
             return;
         }
 
-        $statuses = ['pending', 'approved', 'approved', 'rejected'];
+        foreach ($orders as $order) {
+            $totalRevisions = max(1, $order->current_revision_count + 1);
 
-        for ($i = 1; $i <= 10; $i++) {
-            DB::table('deliverables')->insert([
-                'order_id' => $orderIds[$i % $orderIds->count()],
-                'private_storage_path' => "private/deliverables/order_{$i}/revision_1/final.png",
-                'revision_number' => rand(1, 3),
-                'status' => $statuses[$i % count($statuses)],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            for ($revision = 1; $revision <= $totalRevisions; $revision++) {
+                $status = match (true) {
+                    $order->status === 'done' && $revision === $totalRevisions => 'approved',
+                    $order->status === 'doing' && $revision === $totalRevisions => 'pending',
+                    default => 'rejected',
+                };
+
+                DB::table('deliverables')->insert([
+                    'order_id' => $order->id,
+                    'private_storage_path' => "private/deliverables/order_{$order->id}/revision_{$revision}/artwork.png",
+                    'revision_number' => $revision,
+                    'status' => $status,
+                    'created_at' => now()->subDays(12 - $revision),
+                    'updated_at' => now()->subDays(4 - $revision),
+                ]);
+            }
         }
     }
 }

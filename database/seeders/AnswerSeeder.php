@@ -4,31 +4,69 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AnswerSeeder extends Seeder
 {
     /**
-     * 10 réponses reliant commandes et questions existantes.
+     * Réponses clients alignées avec les questions de la commission commandée.
      * Nécessite que OrderSeeder et QuestionSeeder aient déjà tourné.
      */
     public function run(): void
     {
-        $orderIds = DB::table('orders')->pluck('id');
-        $questionIds = DB::table('questions')->pluck('id');
+        $orders = DB::table('orders')
+            ->orderBy('id')
+            ->get(['id', 'commission_id']);
 
-        if ($orderIds->isEmpty() || $questionIds->isEmpty()) {
+        if ($orders->isEmpty()) {
             $this->command->warn('Commandes ou questions manquantes, exécutez OrderSeeder et QuestionSeeder avant.');
             return;
         }
 
-        for ($i = 1; $i <= 10; $i++) {
-            DB::table('answers')->insert([
-                'order_id' => $orderIds[$i % $orderIds->count()],
-                'question_id' => $questionIds[$i % $questionIds->count()],
-                'value' => json_encode(['text' => "Réponse du client pour la question #$i"]),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        foreach ($orders as $orderIndex => $order) {
+            $questions = DB::table('questions')
+                ->where('commission_id', $order->commission_id)
+                ->orderBy('id')
+                ->get(['id', 'text', 'field_type']);
+
+            foreach ($questions as $questionIndex => $question) {
+                $questionText = json_decode($question->text, true) ?? [];
+                $label = Str::lower($questionText['label'] ?? '');
+                $options = $questionText['options'] ?? [];
+
+                $value = match ($question->field_type) {
+                    'text' => [
+                        'text' => Str::contains($label, 'date')
+                            ? now()->addDays(14 + $orderIndex)->toDateString()
+                            : 'Commande orientée storytelling fantasy avec lumière chaude.',
+                    ],
+                    'number' => ['text' => (string) (($questionIndex % 3) + 1)],
+                    'checkbox' => ['text' => $orderIndex % 2 === 0 ? 'Oui' : 'Non'],
+                    'file' => [
+                        'text' => "brief-ref-order-{$order->id}.png, moodboard-order-{$order->id}.jpg",
+                        'files' => [
+                            [
+                                'url' => "/storage/order-files/brief-ref-order-{$order->id}.png",
+                                'name' => "brief-ref-order-{$order->id}.png",
+                            ],
+                            [
+                                'url' => "/storage/order-files/moodboard-order-{$order->id}.jpg",
+                                'name' => "moodboard-order-{$order->id}.jpg",
+                            ],
+                        ],
+                    ],
+                    'select' => ['text' => $options[$orderIndex % max(count($options), 1)] ?? 'Standard'],
+                    default => ['text' => 'Non renseigné'],
+                };
+
+                DB::table('answers')->insert([
+                    'order_id' => $order->id,
+                    'question_id' => $question->id,
+                    'value' => json_encode($value, JSON_UNESCAPED_UNICODE),
+                    'created_at' => now()->subDays(16 - $orderIndex),
+                    'updated_at' => now()->subDays(8 - $orderIndex),
+                ]);
+            }
         }
     }
 }
