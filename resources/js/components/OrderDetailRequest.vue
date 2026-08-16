@@ -61,7 +61,7 @@ export default {
             return Array.isArray(answer?.value?.files) && answer.value.files.length > 0;
         },
         isImage(file) {
-            return /\.(png|jpe?g|gif|webp)$/i.test(file?.name ?? '');
+            return /\.(png|jpe?g|gif|webp)$/i.test(file?.url ?? '');
         },
         submit(value) {
             if (value === 'confirm') {

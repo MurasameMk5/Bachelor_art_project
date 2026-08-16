@@ -46,12 +46,12 @@ class AnswerSeeder extends Seeder
                         'text' => "brief-ref-order-{$order->id}.png, moodboard-order-{$order->id}.jpg",
                         'files' => [
                             [
-                                'url' => "/storage/order-files/brief-ref-order-{$order->id}.png",
-                                'name' => "brief-ref-order-{$order->id}.png",
+                                'url' => "/lextotan-green-3140400.jpg",
+                                'name' => "lextotan-green-unsplash",
                             ],
                             [
-                                'url' => "/storage/order-files/moodboard-order-{$order->id}.jpg",
-                                'name' => "moodboard-order-{$order->id}.jpg",
+                                'url' => "/La_Madone_de_São_Paulo_painting_by_Alexis_Diaz_and_INTI_in_São_Paulo_downtown.jpg",
+                                'name' => "La_Madone_de_São_Paulo_painting_by_Alexis_Diaz_and_INTI_in_São_Paulo_downtown",
                             ],
                         ],
                     ],

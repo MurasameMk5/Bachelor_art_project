@@ -51,15 +51,15 @@ class OrderSeeder extends Seeder
                     'production' => [
                         'Sketch' => [
                             [
-                                'url' => '/storage/order-images/sketch-01.webp',
-                                'name' => 'sketch-01.webp',
+                                'url' => '/whyxing-chinese-painting-10006608_1920.png',
+                                'name' => 'whyxing-chinese-painting-10006608_1920.png',
                                 'uploaded_at' => now()->subDays(2)->toDateTimeString(),
                             ],
                         ],
                         'Rendering' => [
                             [
-                                'url' => '/storage/order-images/render-01.webp',
-                                'name' => 'render-01.webp',
+                                'url' => '/Arthur_Rackham,_untitled,_1904.jpg',
+                                'name' => 'Arthur_Rackham,_untitled,_1904.jpg',
                                 'uploaded_at' => now()->subDay()->toDateTimeString(),
                             ],
                         ],
@@ -81,8 +81,8 @@ class OrderSeeder extends Seeder
                     'production' => [
                         'Inking' => [
                             [
-                                'url' => '/storage/order-images/inking-01.webp',
-                                'name' => 'inking-01.webp',
+                                'url' => '/Arthur_Rackham,_untitled,_1904.jpg',
+                                'name' => 'Arthur_Rackham,_untitled,_1904.jpg',
                                 'uploaded_at' => now()->subDays(3)->toDateTimeString(),
                             ],
                         ],

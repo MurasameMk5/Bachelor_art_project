@@ -35,7 +35,7 @@ class StorefrontComponentSeeder extends Seeder
             $position = 1;
             $components = [
                 ['type' => 'text', 'content' => ['text' => 'Bienvenue sur mon atelier. Je réponds sous 24h les jours ouvrés.']],
-                ['type' => 'image', 'content' => ['image_nb' => 1, 'images' => [['ref' => '/samples/storefront/header.webp', 'label' => 'Bannière atelier']]]],
+                ['type' => 'image', 'content' => ['image_nb' => 1, 'images' => [['ref' => '/dillon-wanner-VdWI7XhTINg-unsplash.jpg', 'label' => 'Bannière atelier']]]],
                 ['type' => 'tos', 'content' => ['text' => 'Paiement 50% à la validation du brief, 50% à la livraison finale.']],
                 ['type' => 'divider', 'content' => []],
             ];
