@@ -54,9 +54,6 @@ export default {
     },
     methods: {
     },
-    mounted() {
-        console.log("preview:", this.preview, "artist:", this.artist);
-    },
 
 }
 </script>

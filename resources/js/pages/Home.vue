@@ -28,8 +28,5 @@ export default {
         return {};
     },
     methods: {},
-    mounted() {
-        console.log()
-    },
 };
 </script>

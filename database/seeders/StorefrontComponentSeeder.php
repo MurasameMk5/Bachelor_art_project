@@ -34,9 +34,9 @@ class StorefrontComponentSeeder extends Seeder
         foreach ($storefronts as $storefront) {
             $position = 1;
             $components = [
-                ['type' => 'text', 'content' => ['text' => 'Bienvenue sur mon atelier. Je réponds sous 24h les jours ouvrés.']],
+                ['type' => 'text', 'content' => ['text' => "Welcome to my digital art studio! I specialize in fantasy character design, environment concept art, and detailed illustrations. I'm thrilled to help bring your ideas to life. I usually review commission requests and reply within 24-48 business hours. When submitting a request, please provide as many details and visual references as possible!"]],
                 ['type' => 'image', 'content' => ['image_nb' => 1, 'images' => [['ref' => '/dillon-wanner-VdWI7XhTINg-unsplash.jpg', 'label' => 'Bannière atelier']]]],
-                ['type' => 'tos', 'content' => ['text' => 'Paiement 50% à la validation du brief, 50% à la livraison finale.']],
+                ['type' => 'tos', 'content' => ['text' => "Terms of Service:\n• Payment: A 50% non-refundable deposit is required upon approval of the initial rough sketch, with the remaining 50% due before the delivery of the final high-resolution files.\n• Process & Revisions: You will receive updates during the sketch and flat color stages. Up to 2 minor revisions are included for free. Major changes requested during the final rendering phase will incur additional fees.\n• Usage Rights: All commissioned pieces are for personal use only unless a commercial license is explicitly agreed upon and purchased. I retain the right to display the artwork in my professional portfolio and on my social media."]],
                 ['type' => 'divider', 'content' => []],
             ];
 

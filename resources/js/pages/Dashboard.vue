@@ -47,8 +47,5 @@ export default {
         };
     },
     methods: {},
-    mounted() {
-        console.log(this.orders)
-    },
 };
 </script>

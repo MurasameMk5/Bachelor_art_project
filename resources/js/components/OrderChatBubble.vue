@@ -20,8 +20,5 @@ export default {
             required: false,
         }
     },
-    mounted() {
-        console.log('user', this.user);
-    }
 }
 </script>

@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="shrink-0 py-4">
             <OrderChatInput />
         </div>
@@ -40,9 +40,6 @@ export default {
     data() {
         return {
         };
-    },
-    mounted() {
-        console.log('chats', this.chats);
     },
 }
 </script>

@@ -53,7 +53,6 @@ export default {
     methods: {},
     mounted() {
         const orderId = this.id;
-        console.log(this.order);
     },
 };
 </script>

@@ -149,7 +149,6 @@ export default {
             if (existingId) {
                 this.form.patch(`/commissions/${existingId}`);
             } else {
-                console.log("Submitting new commission with data:", this.form);
                 this.form.post('/commissions', {
                     onSuccess: () => {
                         this.confirmationModal = true;

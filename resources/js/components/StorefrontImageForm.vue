@@ -56,10 +56,8 @@ export default {
                 const url = URL.createObjectURL(file);
                 this.imagesSelected[index - 1] = {ref: url, label: file.name, file: file};
             }
-            console.log("imagesSelected", this.imagesSelected);
         },
         submit() {
-            console.log("Submitting form with imagesSelected:", this.imagesSelected);
             const unchangedImages = this.imagesSelected.filter(img => img && !img.file);
             const newImages = this.imagesSelected.filter(img => img && img.file);
 
@@ -78,7 +76,6 @@ export default {
                 this.form.position = this.storefrontStore.getData?.position || 0;
                 this.form.put(`/storefront/components/${existingId}`, {
                     onSuccess: () => {
-                        console.log('Composant mis à jour avec succès', this.form);
                         this.storefrontStore.setSidebarActive(false);
                     },
                 });
@@ -88,7 +85,6 @@ export default {
                 this.form.position = this.totalComponents;
                 this.form.post('/storefront/components', {
                     onSuccess: () => {
-                        console.log('Composant créé avec succès', this.form)
                         this.confirmationModal = true;
                         setTimeout(() => {
                             this.storefrontStore.setSidebarActive(false);
@@ -105,7 +101,6 @@ export default {
             const storeImages = this.storefrontStore.getData.content.images || [];
             this.imagesSelected = storeImages.map(img => ({...img}));
         }
-        console.log("images", this.storefrontStore.getData);
     },
     watch: {
         imageNumber(newVal) {

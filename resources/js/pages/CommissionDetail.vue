@@ -37,8 +37,5 @@ export default {
             orderForm: false,
         };
     },
-    mounted(){
-        console.log(this.commission)
-    }
 }
 </script>

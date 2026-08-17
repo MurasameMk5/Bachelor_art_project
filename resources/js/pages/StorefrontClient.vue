@@ -30,7 +30,6 @@ export default {
     },
     mounted() {
         this.storefront.components.sort((a, b) => a.position - b.position);
-        console.log(this.orders)
     }
 };
 </script>

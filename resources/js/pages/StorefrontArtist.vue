@@ -73,7 +73,6 @@ export default {
         },
     },
     mounted() {
-        console.log(this.storefront);
         this.storefrontStore.setSidebarActive(false);
     }
 };
