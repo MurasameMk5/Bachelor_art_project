@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class CommissionSeeder extends Seeder
 {
-    /**
-     * Commissions réalistes associées aux artistes.
-     * Nécessite que UserSeeder ait déjà tourné.
-     */
     public function run(): void
     {
         $artistIds = DB::table('users')
@@ -19,23 +15,31 @@ class CommissionSeeder extends Seeder
             ->pluck('id');
 
         if ($artistIds->isEmpty()) {
-            $this->command->warn('Aucun artiste trouvé, exécutez UserSeeder avant CommissionSeeder.');
+            $this->command->warn('No artists found. Please run UserSeeder before CommissionSeeder.');
             return;
         }
 
         $catalog = [
-            ['title' => 'Portrait éditorial couleur', 'description' => 'Portrait semi-réaliste, fond simple, usage web éditorial.', 'base_price' => 320, 'estimated_days' => 7, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 3],
-            ['title' => 'Character design complet', 'description' => 'Fiche personnage avec face, profil et palette.', 'base_price' => 780, 'estimated_days' => 14, 'max_free_revisions' => 2, 'status' => 'open', 'slots_available' => 2],
-            ['title' => 'Illustration couverture roman', 'description' => 'Composition complète pour couverture print et numérique.', 'base_price' => 1200, 'estimated_days' => 20, 'max_free_revisions' => 2, 'status' => 'paused', 'slots_available' => 1],
-            ['title' => 'Pack emotes stream x6', 'description' => 'Six emotes cohérentes prêtes pour Twitch/Discord.', 'base_price' => 260, 'estimated_days' => 5, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 4],
-            ['title' => 'Concept environnement', 'description' => 'Key art d environnement pour jeu indépendant.', 'base_price' => 980, 'estimated_days' => 16, 'max_free_revisions' => 2, 'status' => 'open', 'slots_available' => 2],
-            ['title' => 'Portrait duo stylisé', 'description' => 'Deux personnages en plan taille, rendu painterly.', 'base_price' => 540, 'estimated_days' => 9, 'max_free_revisions' => 1, 'status' => 'closed', 'slots_available' => 0],
-            ['title' => 'Icône profil premium', 'description' => 'Avatar carré optimisé réseaux sociaux.', 'base_price' => 140, 'estimated_days' => 3, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 6],
-            ['title' => 'Splash art action', 'description' => 'Illustration dynamique avec effets de lumière.', 'base_price' => 890, 'estimated_days' => 15, 'max_free_revisions' => 2, 'status' => 'open', 'slots_available' => 2],
-            ['title' => 'Croquis exploratoires x10', 'description' => 'Batch de recherches visuelles noir et blanc.', 'base_price' => 300, 'estimated_days' => 6, 'max_free_revisions' => 0, 'status' => 'open', 'slots_available' => 5],
-            ['title' => 'Illustration de scène narrative', 'description' => 'Scène détaillée pour campagne marketing.', 'base_price' => 1350, 'estimated_days' => 24, 'max_free_revisions' => 3, 'status' => 'paused', 'slots_available' => 1],
-            ['title' => 'Mascotte de marque', 'description' => 'Création de mascotte avec variation expression.', 'base_price' => 690, 'estimated_days' => 12, 'max_free_revisions' => 2, 'status' => 'open', 'slots_available' => 2],
-            ['title' => 'Lineart personnage', 'description' => 'Lineart propre prêt à colorisation.', 'base_price' => 210, 'estimated_days' => 4, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 4],
+            [
+                'title' => 'Editorial Color Portrait',
+                'description' => 'Semi-realistic portrait from the chest up with a simple or solid color background. Ideal for editorial use, professional web profiles, or personal branding. You will receive a high-resolution file (300dpi) ready for print and web. Please provide clear reference photos and specify your preferred color palette.',
+                'base_price' => 320, 'estimated_days' => 7, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 3
+            ],
+            [
+                'title' => 'Full Character Design Sheet',
+                'description' => 'A comprehensive character reference sheet including one full-body front view, a side or back view, three facial expressions, and a detailed color palette. Perfect for VTubers, D&D characters, or game development. Includes a transparent PNG version. I need a detailed written description or moodboard to start.',
+                'base_price' => 780, 'estimated_days' => 14, 'max_free_revisions' => 2, 'status' => 'open', 'slots_available' => 2
+            ],
+            [
+                'title' => 'Book Cover Illustration',
+                'description' => 'Full-scale, highly detailed illustration tailored for print and digital book covers (wrap-around if needed). This includes typography placement consultation. The final delivery will be CMYK print-ready and RGB digital formats. Please provide a synopsis, main character details, and the desired mood/atmosphere.',
+                'base_price' => 1200, 'estimated_days' => 20, 'max_free_revisions' => 2, 'status' => 'paused', 'slots_available' => 1
+            ],
+            [
+                'title' => 'Twitch/Discord Emote Pack (x6)',
+                'description' => 'A bundle of 6 custom, highly expressive emotes optimized for Twitch and Discord. You will receive each emote in standard sizes (112px, 56px, 28px) plus a 500px high-res bonus file. Cute, chibi, or stylized according to your brand. Tell me the specific expressions you need (e.g., hype, cry, rage).',
+                'base_price' => 260, 'estimated_days' => 5, 'max_free_revisions' => 1, 'status' => 'open', 'slots_available' => 4
+            ],
         ];
 
         foreach ($artistIds as $artistIndex => $artistId) {

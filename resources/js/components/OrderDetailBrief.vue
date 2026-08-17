@@ -223,7 +223,7 @@ export default {
         let briefHTML = '';
         this.$nextTick(() => {
             if (this.order.stage_details?.brief?.brief_html)
-                briefHTML = this.form.stage_details.brief.brief_html;
+                briefHTML = this.order.stage_details.brief.brief_html;
             else
                 briefHTML = this.$refs.briefTemplate.innerHTML;
 

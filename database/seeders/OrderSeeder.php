@@ -7,28 +7,31 @@ use Illuminate\Support\Facades\DB;
 
 class OrderSeeder extends Seeder
 {
-    /**
-     * Commandes réalistes liées aux commissions existantes.
-     * Une commande par commission pour garantir la même volumétrie par artiste.
-     * Nécessite que UserSeeder et CommissionSeeder aient déjà tourné.
-     */
     public function run(): void
     {
         $clientIds = DB::table('users')
             ->where('role', 'client')
             ->orderBy('id')
             ->pluck('id');
+
         $commissions = DB::table('commissions')
             ->orderBy('id')
             ->get();
 
         if ($clientIds->isEmpty() || $commissions->isEmpty()) {
-            $this->command->warn('Utilisateurs ou commissions manquants, exécutez UserSeeder et CommissionSeeder avant.');
+            $this->command->warn('Missing users or commissions. Please run UserSeeder and CommissionSeeder first.');
             return;
         }
 
         $scenarios = [
-            ['status' => 'to do', 'stage' => null, 'awaiting_confirmation' => false, 'revision_count' => 0, 'extra_price' => 0, 'stage_details' => null],
+            [
+                'status' => 'to do',
+                'stage' => null,
+                'awaiting_confirmation' => false,
+                'revision_count' => 0,
+                'extra_price' => 0,
+                'stage_details' => null
+            ],
             [
                 'status' => 'doing',
                 'stage' => 'brief',
@@ -36,9 +39,6 @@ class OrderSeeder extends Seeder
                 'revision_count' => 0,
                 'extra_price' => 0,
                 'stage_details' => [
-                    'brief' => [
-                        'brief_html' => '<h2>Art commission brief</h2><p>Première synthèse du besoin client avec références visuelles.</p>',
-                    ],
                 ],
             ],
             [
@@ -52,14 +52,14 @@ class OrderSeeder extends Seeder
                         'Sketch' => [
                             [
                                 'url' => '/whyxing-chinese-painting-10006608_1920.png',
-                                'name' => 'whyxing-chinese-painting-10006608_1920.png',
+                                'name' => 'initial_rough_sketch_v1.png',
                                 'uploaded_at' => now()->subDays(2)->toDateTimeString(),
                             ],
                         ],
                         'Rendering' => [
                             [
                                 'url' => '/Arthur_Rackham,_untitled,_1904.jpg',
-                                'name' => 'Arthur_Rackham,_untitled,_1904.jpg',
+                                'name' => 'color_blocking_preview.jpg',
                                 'uploaded_at' => now()->subDay()->toDateTimeString(),
                             ],
                         ],
@@ -75,14 +75,14 @@ class OrderSeeder extends Seeder
                 'stage_details' => [
                     'revision' => [
                         [
-                            'request' => 'Pouvez-vous renforcer le contraste sur le personnage principal et adoucir l arrière-plan ?',
+                            'request' => 'Could you increase the contrast on the main character to make them pop out more? Also, please soften the background a bit so it doesn\'t distract from the face. Thank you!',
                         ],
                     ],
                     'production' => [
                         'Inking' => [
                             [
                                 'url' => '/Arthur_Rackham,_untitled,_1904.jpg',
-                                'name' => 'Arthur_Rackham,_untitled,_1904.jpg',
+                                'name' => 'updated_inking_v2.jpg',
                                 'uploaded_at' => now()->subDays(3)->toDateTimeString(),
                             ],
                         ],
@@ -118,7 +118,9 @@ class OrderSeeder extends Seeder
         foreach ($commissions as $index => $commission) {
             $scenario = $scenarios[$index % count($scenarios)];
             $basePrice = $commission->base_price;
+
             $revisionCount = min($scenario['revision_count'], $commission->max_free_revisions);
+
             $createdAt = now()->subDays(60 - ($index % 30));
             $invoiceGeneratedAt = $scenario['status'] === 'to do' ? null : $createdAt->copy()->addDay();
 
