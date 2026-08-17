@@ -17,10 +17,10 @@ class UserSeeder extends Seeder
         $now = now();
 
         $artists = [
-            ['name' => 'Alessandro Neris', 'email' => 'alessandro.neris@gmail.com'],
-            ['name' => 'Lina Favre', 'email' => 'lina.favre@atelier.test'],
-            ['name' => 'Mael Perrin', 'email' => 'mael.perrin@atelier.test'],
-            ['name' => 'Iris Chappuis', 'email' => 'iris.chappuis@atelier.test'],
+            ['name' => 'Aless', 'email' => 'aless@atelier.test'],
+            ['name' => 'Michelangelo', 'email' => 'michelangelo@atelier.test'],
+            ['name' => 'Monet', 'email' => 'monet@atelier.test'],
+            ['name' => 'Rubens', 'email' => 'rubens@atelier.test'],
         ];
 
         $clients = [
