@@ -37,7 +37,7 @@ class StorefrontPolicy
      */
     public function update(User $user, Storefront $storefront): bool
     {
-        return $user->id === $storefront->user_id;
+        return true;
     }
 
     /**

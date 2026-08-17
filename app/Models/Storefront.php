@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(["id", "user_id", "slug"])]
+#[Fillable(["id", "user_id", "slug","visible", "background_image"])]
 class Storefront extends Model
 {
     public function user()

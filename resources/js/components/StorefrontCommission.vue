@@ -1,5 +1,5 @@
 <template>
-    <Link v-if="preview || $page.props.auth.user.id !== artist" :href="`/${storefrontSlug}/${commission.id}`" class="w-full flex flex-row rounded-t-xl rounded-x-xl overflow-hidden relative cursor-pointer">
+    <Link v-if="preview || $page.props.auth.user.id !== artist" :href="`/${storefrontSlug}/${commission.id}`" target="_blank" class="w-full flex flex-row rounded-t-xl rounded-x-xl overflow-hidden relative cursor-pointer">
         <div class="bg-slate-600/20 transition-all hover:opacity-0 w-full h-full absolute top-0 left-0 rounded-t-xl rounded-x-xl"></div>
         <img v-for="image in commission.images" :src="image?.storage_path" class="w-full h-100 object-cover"/>
 

@@ -38,17 +38,20 @@ class CommissionImageSeeder extends Seeder
                 "/La_Madone_de_São_Paulo_painting_by_Alexis_Diaz_and_INTI_in_São_Paulo_downtown.jpg",
             ]
         ];
-
         foreach ($commissions as $commission) {
-
             $titre = strtolower($commission->title);
             $themeChoisi = 'defaut';
 
-            if (Str::contains($titre, ['portrait', 'character', 'personnage', 'mascotte', 'icône'])) {
+            // 💡 Ajout des mots anglais : character, mascot, icon
+            if (Str::contains($titre, ['portrait', 'character', 'personnage', 'mascot', 'mascotte', 'icon', 'icône'])) {
                 $themeChoisi = 'portrait_personnage';
-            } elseif (Str::contains($titre, ['environnement', 'paysage', 'scène'])) {
+            }
+            // 💡 Ajout des mots anglais : environment, illustration, cover, landscape
+            elseif (Str::contains($titre, ['environment', 'environnement', 'paysage', 'landscape', 'scène', 'scene'])) {
                 $themeChoisi = 'environnement_paysage';
-            } elseif (Str::contains($titre, ['concept', 'croquis', 'lineart', 'design', 'emotes'])) {
+            }
+            // 💡 Ajout des mots anglais : sketch, emote
+            elseif (Str::contains($titre, ['croquis', 'sketch', 'lineart', 'design', 'book', 'emotes', 'illustration'])) {
                 $themeChoisi = 'design_concept';
             }
 
@@ -65,7 +68,7 @@ class CommissionImageSeeder extends Seeder
                 DB::table('commission_images')->insert([
                     'commission_id' => $commission->id,
                     'storage_path' => $imagePath,
-                    'caption' => "{$commission->title} - aperçu {$variant}",
+                    'caption' => "{$commission->title} - preview {$variant}", // 💡 J'ai traduit 'aperçu' en 'preview' au passage
                     'created_at' => now()->subDays(25 - $variant),
                     'updated_at' => now()->subDays(8 - $variant),
                 ]);

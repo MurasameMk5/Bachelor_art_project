@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('slug')->unique();
+            $table->boolean('visible')->default(false);
+            $table->string('background_image')->nullable();
             $table->timestamps();
         });
     }

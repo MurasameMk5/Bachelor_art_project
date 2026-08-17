@@ -15,7 +15,7 @@
                 <div class="flex flex-col gap-4 my-4 mb-20">
                     <div class="mx-2 flex flex-row justify-between gap-3 sm:mx-4 sm:gap-4">
                         <label>Background</label>
-                        <input type="file" class="w-full max-w-44" />
+                        <input type="file" @change="updateBackgroundImage" class="w-full max-w-44"/>
                     </div>
                     <div class="mx-2 flex flex-row justify-between sm:mx-4">
                         <label>Visible</label>
@@ -28,7 +28,7 @@
                         <Icon :icon="component.icon" class="w-6 h-6" />
                         <span> {{ component.label }} </span>
                     </div>
-                    <div v-for="component in this.components.filter(c => !c.form)" :key="component.type" @click="submit(component.type)" class="my-2 flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-secondary-300 py-2 text-center hover:bg-secondary-400">
+                    <div v-for="component in this.components.filter(c => !c.form)" :key="component.type" @click="submitComponent(component.type)" class="my-2 flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-secondary-300 py-2 text-center hover:bg-secondary-400">
                         <Icon :icon="component.icon" class="w-6 h-6" />
                         <span> {{ component.label }} </span>
                     </div>
@@ -84,11 +84,15 @@ export default {
             storefrontStore: useStorefrontStore(),
             totalComponents: 0,
             confirmationModal: false,
-            form: useForm({
+            componentForm: useForm({
                 type: 'text',
                 content: {},
                 is_visible: true,
                 position: 0,
+            }),
+            storefrontForm: useForm({
+                visible: this.$page.props.storefront?.visible ?? false,
+                background_image: null,
             }),
             components: [
                 { type: "commission", label: "Commission", form: true, icon: "lucide:form" },
@@ -119,19 +123,19 @@ export default {
                     break;
             }
         },
-        submit(componentType) {
-            this.form.position = this.totalComponents;
+        submitComponent(componentType) {
+            this.componentForm.position = this.totalComponents;
             if (componentType === "text") {
-                this.form.type = "text";
-                this.form.content = { text: "Type your text here..." };
+                this.componentForm.type = "text";
+                this.componentForm.content = { text: "Type your text here..." };
             } else if (componentType === "divider") {
-                this.form.type = "divider";
-                this.form.content = {};
+                this.componentForm.type = "divider";
+                this.componentForm.content = {};
             } else if (componentType === "kanban") {
-                this.form.type = "kanban";
-                this.form.content = {};
+                this.componentForm.type = "kanban";
+                this.componentForm.content = {};
             }
-            this.form.post("/storefront/components", {
+            this.componentForm.post("/storefront/components", {
                 onSuccess: () => {
                     this.confirmationModal = true;
                     setTimeout(() => {
@@ -140,6 +144,23 @@ export default {
                 }
             });
         },
+        updateBackgroundImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.storefrontForm.background_image = file;
+                this.updateStorefront();
+            }
+        },
+        updateStorefront() {
+            const storefrontId = this.$page.props.storefront.id;
+
+            this.storefrontForm.patch(`/storefronts/${storefrontId}`, {
+                    preserveState: true,
+                    onSuccess: () => {
+                        console.log("Storefront updated successfully !");
+                    }
+                });
+        }
     },
     mounted() {
         if(this.storefrontStore.getTotalComponents) {

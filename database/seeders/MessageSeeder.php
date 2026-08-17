@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 class MessageSeeder extends Seeder
 {
     /**
-     * Conversations réalistes entre client et artiste.
-     * Nécessite que OrderSeeder ait déjà tourné.
+     * Realistic conversations between client and artist.
+     * Requires OrderSeeder to be executed first.
      */
     public function run(): void
     {
@@ -18,40 +18,40 @@ class MessageSeeder extends Seeder
             ->get(['id', 'artist_id', 'client_id', 'production_stage']);
 
         if ($orders->isEmpty()) {
-            $this->command->warn('Aucune commande trouvée, exécutez OrderSeeder avant MessageSeeder.');
+            $this->command->warn('No orders found. Please run OrderSeeder before MessageSeeder.');
             return;
         }
 
+        // Threads adapted to match the specific stages defined in OrderSeeder
         $threadsByStage = [
             'brief' => [
-                ['from' => 'client', 'text' => 'Bonjour ! Je confirme le brief et les références envoyées.'],
-                ['from' => 'artist', 'text' => 'Parfait, merci. Je vous envoie un premier rough sous 48h.'],
-                ['from' => 'client', 'text' => 'Super, hâte de voir la proposition.'],
+                ['from' => 'client', 'text' => 'Hi! I just reviewed the brief. Everything looks correct, and the references I attached should give you a good idea of the vibe I am going for.'],
+                ['from' => 'artist', 'text' => 'Perfect, thank you! I have everything I need. I will start working on the contract and send it over within the next few days.'],
+                ['from' => 'client', 'text' => 'Thank you!'],
             ],
             'production' => [
-                ['from' => 'artist', 'text' => 'La composition principale est posée, je peaufine les lumières.'],
-                ['from' => 'client', 'text' => 'Top, je valide bien cette direction.'],
-                ['from' => 'artist', 'text' => 'Merci pour le retour rapide, je continue la finalisation.'],
+                ['from' => 'artist', 'text' => 'Hi there! I have uploaded the initial sketches and a render for you to check out. Let me know what you think of the direction so far.'],
+                ['from' => 'client', 'text' => 'It looks amazing! The composition is exactly what I had in mind. The rendering is gorgeous.'],
+                ['from' => 'artist', 'text' => 'Glad you like it! I will keep working on the details and final rendering now.'],
             ],
             'revision' => [
-                ['from' => 'artist', 'text' => 'Version 1 livrée. Je suis preneur de vos retours détaillés.'],
-                ['from' => 'client', 'text' => 'Pouvez-vous renforcer le contraste et ajuster le fond ?'],
-                ['from' => 'artist', 'text' => 'Bien reçu, je vous envoie la révision ce soir.'],
+                ['from' => 'artist', 'text' => 'Hello! I have uploaded the latest version. Let me know if everything is to your liking or if you need any final adjustments.'],
+                ['from' => 'artist', 'text' => 'I have received your revision request. I will make those adjustments and get back to you with the updated version shortly.'],
             ],
             'awaiting_payment' => [
-                ['from' => 'artist', 'text' => 'Livraison finale effectuée avec fichiers HD.'],
-                ['from' => 'client', 'text' => 'Tout est conforme, je procède au paiement dans la journée.'],
-                ['from' => 'artist', 'text' => 'Merci beaucoup pour votre confiance !'],
+                ['from' => 'artist', 'text' => 'Great news! The artwork is fully complete. I have generated the final invoice for the remaining balance. Once paid, I will release the high-res files.'],
+                ['from' => 'client', 'text' => 'It looks absolutely fantastic! I will process the payment right away.'],
+                ['from' => 'artist', 'text' => 'Payment received, thank you so much! I am preparing your final files now.'],
             ],
             'final_delivery' => [
-                ['from' => 'artist', 'text' => 'Merci encore pour le projet, le dossier final reste accessible ici.'],
-                ['from' => 'client', 'text' => 'Travail impeccable, je reviendrai pour une prochaine commande.'],
+                ['from' => 'artist', 'text' => 'Thank you again for your trust! I have attached the final high-resolution files to the delivery tab. It was a real pleasure working with you on this project.'],
+                ['from' => 'client', 'text' => 'Files received! The final result is absolutely stunning. I will definitely come back for future commissions!'],
             ],
         ];
 
         foreach ($orders as $order) {
-            $threadStage = $order->production_stage ?? 'brief';
-            $thread = $threadsByStage[$threadStage] ?? $threadsByStage['brief'];
+            $threadStage = $order->production_stage;
+            $thread = $threadsByStage[$threadStage] ?? [];
 
             foreach ($thread as $step => $message) {
                 DB::table('messages')->insert([

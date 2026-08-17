@@ -16,6 +16,7 @@ Route::get('/dashboard', [OrderController::class, 'index'])->middleware(['auth:s
 
 Route::middleware(['auth:sanctum', 'can:artist'])->group(function () {
     Route::get('/storefront', [StorefrontController::class, 'showArtist']);
+    Route::patch('/storefronts/{storefront}', [StorefrontController::class, 'update']);
     Route::post('/storefront/components', [StorefrontComponentController::class, 'insert']);
     Route::match(['PUT', 'PATCH'], '/storefront/components/{component}', [StorefrontComponentController::class, 'update']);
     Route::match(['PUT', 'PATCH'], '/storefront/components/{component}/{direction}', [StorefrontComponentController::class, 'updatePosition']);

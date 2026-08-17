@@ -1,6 +1,6 @@
 <template>
     <div class="fixed inset-0 bg-black/10 grid place-items-center z-50 " @click="$emit('close')">
-        <div @click.stop class="flex flex-col p-5 bg-white rounded-lg border-2 border-secondary max-h-[90vh] w-1/3 ">
+        <div @click.stop class="flex flex-col p-5 bg-white rounded-lg border-2 border-secondary max-h-[90vh] min-w-1/2 ">
             <h3 class="text-lg font-bold">Request Commission</h3>
             <p>Please fill out the form below to request this commission.</p>
             <div class="mt-4 overflow-y-auto px-5">

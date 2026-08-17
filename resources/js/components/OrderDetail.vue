@@ -1,5 +1,6 @@
 <template>
     <div class="mx-4 py-8 flex h-full flex-col">
+        <OrderProgressBar :order="order"/>
         <span class="text-2xl shrink-0"> {{order.commission.title}} - {{ order.client.name }}</span>
         <div class="overflow-y-auto px-4">
             <OrderDetailRequest v-if="order.status === 'to do' && order.production_stage === null" :order="order"/>
@@ -17,6 +18,7 @@ import OrderDetailBrief from './OrderDetailBrief.vue';
 import OrderDetailProduction from './OrderDetailProduction.vue';
 import OrderDetailPayment from './OrderDetailPayment.vue';
 import OrderDetailRevision from './OrderDetailRevision.vue';
+import OrderProgressBar from './OrderProgressBar.vue';
 
 export default {
     components: {
@@ -24,7 +26,8 @@ export default {
         OrderDetailBrief,
         OrderDetailProduction,
         OrderDetailPayment,
-        OrderDetailRevision
+        OrderDetailRevision,
+        OrderProgressBar
     },
     props: {
         order: {

@@ -1,6 +1,6 @@
 <template>
     <div class="relative flex h-full min-h-0 flex-row items-stretch overflow-hidden">
-        <img v-if="backgroundImage" :src="backgroundImage" class="absolute top-0 left-0 w-full h-full -z-10"/>
+        <img v-if="storefront.background_image && preview" :src="storefront.background_image" class="absolute top-0 left-0 w-full h-full -z-10"/>
 
         <Transition
             enter-active-class="transition duration-200 ease-out transform"
