@@ -21,6 +21,11 @@ class UserSeeder extends Seeder
             ['name' => 'Michelangelo', 'email' => 'michelangelo@atelier.test'],
             ['name' => 'Monet', 'email' => 'monet@atelier.test'],
             ['name' => 'Rubens', 'email' => 'rubens@atelier.test'],
+            ['name' => 'Leonardo', 'email' => 'leonardo@atelier.test'],
+            ['name' => 'Rembrandt', 'email' => 'rembrandt@atelier.test'],
+            ['name' => 'Vermeer', 'email' => 'vermeer@atelier.test'],
+            ['name' => 'Caravaggio', 'email' => 'caravaggio@atelier.test'],
+            ['name' => 'Raphael', 'email' => 'raphael@atelier.test'],
         ];
 
         $clients = [
